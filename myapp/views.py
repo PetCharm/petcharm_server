@@ -1,19 +1,8 @@
-import datetime
-import hashlib
-import json
-from collections import Counter
-
-import torch
-from django.contrib.auth.hashers import make_password, check_password
-from django.http import JsonResponse
-from django.db.models import Sum, Count, Max, Min, Avg
 from django.contrib import auth
-from django.contrib.auth.hashers import make_password, check_password
 import django.contrib.auth.models as auth_models
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import render
 
-from myapp.forecast import Net, predict
 from myapp.models import *
 import logging
 

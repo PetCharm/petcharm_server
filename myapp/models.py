@@ -55,8 +55,8 @@ class Rating(models.Model):
     rating_id = models.AutoField(primary_key=True)
     rating_content = models.CharField(max_length=200, blank=True, null=True)
     rating_score = models.IntegerField(blank=True, null=True)
-    rating_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True)
-    rating_by_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True)
+    rating_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True, related_name='rating_1')
+    rating_by_user = models.ForeignKey('User', models.DO_NOTHING, related_name='rating_2')
 
     class Meta:
         managed = False
@@ -78,8 +78,8 @@ class Service(models.Model):
 
 class Star(models.Model):
     star_id = models.AutoField(primary_key=True)
-    star_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True)
-    star_by_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True)
+    star_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True, related_name='star_1')
+    star_by_user = models.ForeignKey('User', models.DO_NOTHING, related_name='star_2')
 
     class Meta:
         managed = False

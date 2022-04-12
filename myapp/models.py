@@ -16,7 +16,6 @@ class Comment(models.Model):
     comment_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'comment'
 
 
@@ -25,7 +24,6 @@ class Hospital(models.Model):
     hospital_name = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'hospital'
 
 
@@ -38,7 +36,6 @@ class Pet(models.Model):
     pet_date_of_birth = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'pet'
 
 
@@ -48,7 +45,6 @@ class Post(models.Model):
     post_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'post'
 
 
@@ -57,10 +53,9 @@ class Rating(models.Model):
     rating_content = models.CharField(max_length=200, blank=True, null=True)
     rating_score = models.IntegerField(blank=True, null=True)
     rating_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True, related_name='rating_1')
-    rating_by_user = models.ForeignKey('User', models.DO_NOTHING, related_name='rating_2')
+    rating_by_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True, related_name='rating_2')
 
     class Meta:
-        managed = False
         db_table = 'rating'
 
 
@@ -73,17 +68,15 @@ class Service(models.Model):
     service_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'service'
 
 
 class Star(models.Model):
     star_id = models.AutoField(primary_key=True)
     star_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True, related_name='star_1')
-    star_by_user = models.ForeignKey('User', models.DO_NOTHING, related_name='star_2')
+    star_by_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True, related_name='star_2')
 
     class Meta:
-        managed = False
         db_table = 'star'
 
 
@@ -94,17 +87,15 @@ class User(AbstractUser):
     user_phone_number = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'user'
 
 
 class VetHospital(models.Model):
     vet_hospital_id = models.IntegerField(blank=True, null=True)
     vet = models.OneToOneField(User, models.DO_NOTHING, primary_key=True)
-    hospital = models.ForeignKey(Hospital, models.DO_NOTHING)
+    hospital = models.ForeignKey(Hospital, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'vet_hospital'
         unique_together = (('vet', 'hospital'),)
 
@@ -116,6 +107,4 @@ class WalkPoint(models.Model):
     walk_point_user = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'walk_point'
-

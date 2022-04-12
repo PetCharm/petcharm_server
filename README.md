@@ -2,4 +2,4 @@
 
 ## 模型ER图
 
-![](https://pic.mcatk.com/soto/202204130015443.png)
+![](https://pic.mcatk.com/soto/202204130017572.png)

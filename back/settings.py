@@ -41,6 +41,14 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'myapp.User'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'petcharmserver@163.com'
+EMAIL_HOST_PASSWORD = 'UYQEBZLPFKMQHAOG'
+EMAIL_FROM = 'PetCharm官方 <petcharmserver@163.com>'
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',

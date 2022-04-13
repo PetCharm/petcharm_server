@@ -1,5 +1,4 @@
 from django.contrib import auth
-import django.contrib.auth.models as auth_models
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -23,11 +22,10 @@ def login(request):
 
 def register(request):
     if request.method == "GET":
-        return render(request, "login.html")
+        return render(request, "register.html")
     username = request.POST.get("userName")
     password = request.POST.get("userPassword")
-    user = auth.authenticate(username=username, password=password)
+    user = User.objects.create_user(username=username, password=password)
     if user is not None:
-        return HttpResponse({"success": False, "message": "用户名已存在"})
-    auth_models.User.objects.create_user(username=username, password=password)
-    return HttpResponse({"success": True, "message": "注册成功"})
+        return HttpResponse({"success": True, "message": "注册成功"})
+    return HttpResponse({"success": False, "message": "用户名已存在"})

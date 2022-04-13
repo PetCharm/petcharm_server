@@ -29,3 +29,8 @@ def register(request):
     if user is not None:
         return HttpResponse({"success": True, "message": "注册成功"})
     return HttpResponse({"success": False, "message": "用户名已存在"})
+
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponse({"success": True, "message": "注销成功"})

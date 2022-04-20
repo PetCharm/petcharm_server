@@ -29,7 +29,7 @@ class Hospital(models.Model):
 
 class Pet(models.Model):
     pet_id = models.AutoField(primary_key=True)
-    pet_display_name = models.CharField(max_length=100, blank=True, null=True)
+    pet_name = models.CharField(max_length=100, blank=True, null=True)
     pet_type = models.CharField(max_length=100, blank=True, null=True)
     pet_breed = models.CharField(max_length=100, blank=True, null=True)
     pet_gender = models.CharField(max_length=100, blank=True, null=True)

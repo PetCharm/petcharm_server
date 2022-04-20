@@ -25,5 +25,6 @@ urlpatterns = [
     path('api/register/', myapp.views.register),
     path('api/logout/', myapp.views.logout),
     path('api/setPetInfo/', myapp.views.set_pet_info),
+    path('api/getPetInfo/', myapp.views.get_pet_info),
     url(r'^', TemplateView.as_view(template_name="index.html")),
 ]

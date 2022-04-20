@@ -1,5 +1,8 @@
+import json
+from datetime import datetime, timezone
+
 from django.contrib import auth
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
 from myapp.models import *
@@ -51,3 +54,17 @@ def set_pet_info(request):
     user.pet = new_pet
     user.save()
     return HttpResponse({"success": True, "message": "宠物信息设置成功"})
+
+
+def get_pet_info(request):
+    user_id = request.session.get('_auth_user_id')
+    user = User.objects.get(id=user_id)
+    pet = user.pet
+    pet_info = {
+        "petName": pet.pet_name,
+        "petType": pet.pet_type,
+        "petBreed": pet.pet_breed,
+        "petGender": pet.pet_gender,
+        "petAge": (datetime.now(timezone.utc) - pet.pet_date_of_birth).days
+    }
+    return JsonResponse(pet_info)

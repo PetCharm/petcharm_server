@@ -34,6 +34,7 @@ def register(request):
     password = request.POST.get("userPassword")
     user = User.objects.create_user(username=username, password=password)
     if user is not None:
+        user.is_active = False
         return HttpResponse({"success": True, "message": "注册成功"})
     return HttpResponse({"success": False, "message": "用户名已存在"})
 

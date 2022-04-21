@@ -5,6 +5,8 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+from datetime import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -108,3 +110,19 @@ class WalkPoint(models.Model):
 
     class Meta:
         db_table = 'walk_point'
+
+
+class EmailVerificationCode(models.Model):
+    code = models.CharField(max_length=20, verbose_name=u"验证码")
+    email = models.EmailField(max_length=50, verbose_name=u"邮箱")
+    send_type = models.CharField(verbose_name=u"验证码类型", max_length=10,
+                                 choices=(("register", u"注册"), ("forget", u"找回密码")))
+    send_time = models.DateTimeField(verbose_name=u"发送时间", default=datetime.now)
+
+    class Meta:
+        verbose_name = u"邮箱验证码"
+        verbose_name_plural = verbose_name
+        db_table = 'email_verification_code'
+
+    def __unicode__(self):
+        return '{0}({1})'.format(self.code, self.email)

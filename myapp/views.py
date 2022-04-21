@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
 from myapp.models import *
+import myapp.verification as verification
 import logging
 
 logger = logging.getLogger(__name__)
@@ -68,3 +69,21 @@ def get_pet_info(request):
         "petAge": (datetime.now(timezone.utc) - pet.pet_date_of_birth).days
     }
     return JsonResponse(pet_info)
+
+
+def get_verification_code(request):
+    user_id = request.session.get('_auth_user_id')
+    user = User.objects.get(id=user_id)
+    verification.send_code(user.email)
+    return HttpResponse({"success": True, "message": "验证码已发送"})
+
+
+def verify_code(request):
+    user_id = request.session.get('_auth_user_id')
+    user = User.objects.get(id=user_id)
+    code = request.POST.get("code")
+    record = EmailVerificationCode.objects.get(code=code)
+    if record is not None and record.user == user:
+        user.is_active = True
+        user.save()
+        return HttpResponse({"success": True, "message": "验证码正确"})

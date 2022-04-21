@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from django.contrib import auth
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 from myapp.models import *
 import myapp.verification as verification
@@ -12,6 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@csrf_exempt
 def login(request):
     if request.method == "GET":
         return render(request, "login.html")
@@ -24,6 +26,7 @@ def login(request):
     return HttpResponse({"success": False, "message": "用户名或密码错误"})
 
 
+@csrf_exempt
 def register(request):
     if request.method == "GET":
         return render(request, "register.html")
@@ -35,6 +38,7 @@ def register(request):
     return HttpResponse({"success": False, "message": "用户名已存在"})
 
 
+@csrf_exempt
 def logout(request):
     auth.logout(request)
     return HttpResponse({"success": True, "message": "注销成功"})
@@ -82,8 +86,11 @@ def verify_code(request):
     user_id = request.session.get('_auth_user_id')
     user = User.objects.get(id=user_id)
     code = request.POST.get("code")
-    record = EmailVerificationCode.objects.get(code=code)
-    if record is not None and record.user == user:
-        user.is_active = True
-        user.save()
-        return HttpResponse({"success": True, "message": "验证码正确"})
+    records = EmailVerificationCode.objects.filter(code=code)
+    for record in records:
+        if record.user.id == user.id:
+            user.is_active = True
+            user.save()
+            record.delete()
+            return HttpResponse({"success": True, "message": "验证码正确"})
+    return HttpResponse({"success": False, "message": "验证码错误"})

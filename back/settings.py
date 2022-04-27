@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
     'myapp',
 ]
 
@@ -50,7 +49,6 @@ EMAIL_HOST_PASSWORD = 'UYQEBZLPFKMQHAOG'
 EMAIL_FROM = 'PetCharm官方 <petcharmserver@163.com>'
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

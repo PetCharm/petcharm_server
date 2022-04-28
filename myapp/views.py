@@ -110,6 +110,7 @@ def get_user_info(request):
     }
     return JsonResponse(user_info)
 
+
 def set_user_info(request):
     if request.method == "GET":
         return render(request, "set_user_info.html")
@@ -123,3 +124,31 @@ def set_user_info(request):
     user.save()
     return JsonResponse({"success": True, "message": "用户信息设置成功"})
 
+
+def getAllPosts(request):
+    posts = Post.objects.all()
+    posts_info = []
+    for post in posts:
+        post_info = {
+            "postId": post.id,
+            "postTitle": post.title,
+            "postContent": post.content,
+            "postDate": post.date
+        }
+        posts_info.append(post_info)
+    return JsonResponse(posts_info, safe=False)
+
+
+def getPostComment(request):
+    post_id = request.GET.get("postId")
+    post = Post.objects.get(id=post_id)
+    comments = Comment.objects.all().filter(post=post)
+    comments_info = []
+    for comment in comments:
+        comment_info = {
+            "commentId": comment.id,
+            "commentContent": comment.content,
+            "commentDate": comment.date
+        }
+        comments_info.append(comment_info)
+    return JsonResponse(comments_info, safe=False)

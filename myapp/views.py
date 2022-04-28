@@ -1,8 +1,7 @@
-import json
-from datetime import datetime, timezone
+from datetime import timezone
 
 from django.contrib import auth
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
@@ -22,8 +21,8 @@ def login(request):
     user = auth.authenticate(username=username, password=password)
     if user is not None:
         auth.login(request, user)
-        return HttpResponse({"success": True, "message": "登录成功"})
-    return HttpResponse({"success": False, "message": "用户名或密码错误"})
+        return JsonResponse({"success": True, "message": "登录成功"})
+    return JsonResponse({"success": False, "message": "用户名或密码错误"})
 
 
 @csrf_exempt
@@ -35,14 +34,14 @@ def register(request):
     user = User.objects.create_user(username=username, password=password)
     if user is not None:
         user.is_active = False
-        return HttpResponse({"success": True, "message": "注册成功"})
-    return HttpResponse({"success": False, "message": "用户名已存在"})
+        return JsonResponse({"success": True, "message": "注册成功"})
+    return JsonResponse({"success": False, "message": "用户名已存在"})
 
 
 @csrf_exempt
 def logout(request):
     auth.logout(request)
-    return HttpResponse({"success": True, "message": "注销成功"})
+    return JsonResponse({"success": True, "message": "注销成功"})
 
 
 def set_pet_info(request):
@@ -59,7 +58,7 @@ def set_pet_info(request):
     user = User.objects.get(id=user_id)
     user.pet = new_pet
     user.save()
-    return HttpResponse({"success": True, "message": "宠物信息设置成功"})
+    return JsonResponse({"success": True, "message": "宠物信息设置成功"})
 
 
 def get_pet_info(request):
@@ -80,7 +79,7 @@ def get_verification_code(request):
     user_id = request.session.get('_auth_user_id')
     user = User.objects.get(id=user_id)
     verification.send_code(user.email)
-    return HttpResponse({"success": True, "message": "验证码已发送"})
+    return JsonResponse({"success": True, "message": "验证码已发送"})
 
 
 def verify_code(request):
@@ -93,5 +92,5 @@ def verify_code(request):
             user.is_active = True
             user.save()
             record.delete()
-            return HttpResponse({"success": True, "message": "验证码正确"})
-    return HttpResponse({"success": False, "message": "验证码错误"})
+            return JsonResponse({"success": True, "message": "验证码正确"})
+    return JsonResponse({"success": False, "message": "验证码错误"})

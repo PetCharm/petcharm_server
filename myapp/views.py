@@ -94,3 +94,20 @@ def verify_code(request):
             record.delete()
             return JsonResponse({"success": True, "message": "验证码正确"})
     return JsonResponse({"success": False, "message": "验证码错误"})
+
+
+def get_user_info(request):
+    user_id = request.session.get('_auth_user_id')
+    user = User.objects.get(id=user_id)
+    user_info = {
+        "userName": user.username,
+        "userFirstName": user.first_name,
+        "userLastName": user.last_name,
+        "userIsActive": user.is_active,
+        "userType": user.user_type,
+        "userEmail": user.email,
+        "userIconUrl": user.user_icon_url,
+    }
+    return JsonResponse(user_info)
+
+

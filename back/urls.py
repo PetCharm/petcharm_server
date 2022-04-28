@@ -28,5 +28,6 @@ urlpatterns = [
     path('api/getPetInfo/', myapp.views.get_pet_info),
     path('api/getVerificationCode/', myapp.views.get_verification_code),
     path('api/verifyCode/', myapp.views.verify_code),
+    path('api/getUserInfo/', myapp.views.get_user_info),
     url(r'^', TemplateView.as_view(template_name="index.html")),
 ]

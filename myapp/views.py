@@ -110,4 +110,16 @@ def get_user_info(request):
     }
     return JsonResponse(user_info)
 
+def set_user_info(request):
+    if request.method == "GET":
+        return render(request, "set_user_info.html")
+    user_id = request.session.get('_auth_user_id')
+    user = User.objects.get(id=user_id)
+    user.first_name = request.POST.get("userFirstName")
+    user.last_name = request.POST.get("userLastName")
+    user.email = request.POST.get("userEmail")
+    user.set_password(request.POST.get("userPassword"))
+    user.user_icon_url = request.POST.get("userIconUrl")
+    user.save()
+    return JsonResponse({"success": True, "message": "用户信息设置成功"})
 

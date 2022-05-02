@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from myapp.models import *
 import myapp.verification as verification
+import myapp.openIM as openIM
 import logging
 
 logger = logging.getLogger(__name__)
@@ -34,7 +35,8 @@ def register(request):
     user = User.objects.create_user(username=username, password=password)
     if user is not None:
         user.is_active = False
-        return JsonResponse({"success": True, "message": "注册成功"})
+        token = openIM.register(user)
+        return JsonResponse({"success": True, "message": "注册成功", "im_token": token})
     return JsonResponse({"success": False, "message": "用户名已存在"})
 
 

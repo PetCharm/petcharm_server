@@ -127,7 +127,7 @@ def set_user_info(request):
     return JsonResponse({"success": True, "message": "用户信息设置成功"})
 
 
-def getAllPosts(request):
+def get_all_posts(request):
     posts = Post.objects.all()
     posts_info = []
     for post in posts:
@@ -141,7 +141,7 @@ def getAllPosts(request):
     return JsonResponse(posts_info, safe=False)
 
 
-def getPostComment(request):
+def get_post_comments(request):
     post_id = request.GET.get("postId")
     post = Post.objects.get(id=post_id)
     comments = Comment.objects.all().filter(post=post)

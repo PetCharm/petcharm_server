@@ -30,8 +30,8 @@ urlpatterns = [
     path('api/verifyCode/', myapp.views.verify_code),
     path('api/getUserInfo/', myapp.views.get_user_info),
     path('api/setUserInfo/', myapp.views.set_user_info),
-    path('api/getAllPost/', myapp.views.getAllPosts),
-    path('api/getPostComment/', myapp.views.getPostComment),
+    path('api/getAllPost/', myapp.views.get_all_posts),
+    path('api/getPostComment/', myapp.views.get_post_comments),
     path('api/getUserIMToken/', myapp.views.get_user_im_token),
     url(r'^', TemplateView.as_view(template_name="index.html")),
 ]

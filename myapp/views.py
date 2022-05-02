@@ -154,3 +154,10 @@ def getPostComment(request):
         }
         comments_info.append(comment_info)
     return JsonResponse(comments_info, safe=False)
+
+
+def get_user_im_token(request):
+    user_id = request.session.get('_auth_user_id')
+    user = User.objects.get(id=user_id)
+    im_token = openIM.get_token(user.username)
+    return JsonResponse({"token": im_token})

@@ -35,7 +35,7 @@ def register(request):
     user = User.objects.create_user(username=username, password=password)
     if user is not None:
         user.is_active = False
-        token = openIM.register(user)
+        token = openIM.register(user.username)
         return JsonResponse({"success": True, "message": "注册成功", "im_token": token})
     return JsonResponse({"success": False, "message": "用户名已存在"})
 
@@ -156,6 +156,7 @@ def get_post_comments(request):
     return JsonResponse(comments_info, safe=False)
 
 
+@csrf_exempt
 def get_user_im_token(request):
     user_id = request.session.get('_auth_user_id')
     user = User.objects.get(id=user_id)

@@ -1,7 +1,7 @@
 import requests
 
 url = 'http://43.138.31.99:10002/'
-secret = '"tuoyun"'
+secret = 'petcharmsecretestkey9283'
 
 
 def register(username):

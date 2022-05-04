@@ -1,0 +1,4 @@
+Django==3.2.9
+PyMySQL==1.0.2
+requests==2.27.1
+uwsgi==2.0.18

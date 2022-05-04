@@ -35,5 +35,6 @@ urlpatterns = [
     path('api/getUserIMToken/', myapp.views.get_user_im_token),
     path('api/getVerificationCodeWithUsername/', myapp.views.get_verification_code_with_username),
     path('api/verifyCodeAndChangePassword/', myapp.views.verify_code_and_change_password),
+    path('api/getAllUnadoptedPets/', myapp.views.get_all_unadopted_pets),
     url(r'^', TemplateView.as_view(template_name="index.html")),
 ]

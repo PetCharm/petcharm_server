@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from myapp.models import *
 import myapp.verification as verification
 import myapp.openIM as openIM
+import myapp.info as info
 import logging
 
 logger = logging.getLogger(__name__)
@@ -67,13 +68,7 @@ def get_pet_info(request):
     user_id = request.session.get('_auth_user_id')
     user = User.objects.get(id=user_id)
     pet = user.pet
-    pet_info = {
-        "petName": pet.pet_name,
-        "petType": pet.pet_type,
-        "petBreed": pet.pet_breed,
-        "petGender": pet.pet_gender,
-        "petAge": (datetime.now(timezone.utc) - pet.pet_date_of_birth).days
-    }
+    pet_info = info.get_pet_info(pet)
     return JsonResponse(pet_info)
 
 
@@ -185,3 +180,14 @@ def get_user_im_token(request):
     user = User.objects.get(id=user_id)
     im_token = openIM.get_token(user.username)
     return JsonResponse({"token": im_token})
+
+
+def get_all_unadopted_pets(request):
+    adopted_pets = []
+    for user in User.objects.all():
+        adopted_pets.append(user.pet)
+    pets = Pet.objects.all() - adopted_pets
+    pets_info = []
+    for pet in pets:
+        pets_info.append(info.get_pet_info(pet))
+    return JsonResponse({"pets_info": pets_info})

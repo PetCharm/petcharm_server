@@ -84,6 +84,15 @@ def get_verification_code(request):
     return JsonResponse({"success": True, "message": "验证码已发送"})
 
 
+def get_verification_code_with_username(request):
+    username = request.POST.get("username")
+    user = User.objects.get(username=username)
+    if not user.is_active:
+        return JsonResponse({"success": False, "message": "该用户未绑定邮箱"})
+    verification.send_code(user.email)
+    return JsonResponse({"success": True, "message": "验证码已发送"})
+
+
 def verify_code(request):
     user_id = request.session.get('_auth_user_id')
     user = User.objects.get(id=user_id)
@@ -95,6 +104,20 @@ def verify_code(request):
             user.save()
             record.delete()
             return JsonResponse({"success": True, "message": "验证码正确"})
+    return JsonResponse({"success": False, "message": "验证码错误"})
+
+
+def verify_code_and_change_password(request):
+    username = request.POST.get("username")
+    user = User.objects.get(username=username)
+    code = request.POST.get("code")
+    records = EmailVerificationCode.objects.filter(code=code)
+    for record in records:
+        if record.user == user:
+            user.set_password(request.POST.get("password"))
+            user.save()
+            record.delete()
+            return JsonResponse({"success": True, "message": "密码修改成功"})
     return JsonResponse({"success": False, "message": "验证码错误"})
 
 

@@ -46,6 +46,8 @@ class Post(models.Model):
     post_id = models.AutoField(primary_key=True)
     post_content = models.CharField(max_length=500, blank=True, null=True)
     post_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True)
+    post_date = models.DateTimeField(blank=True, null=True)
+    post_cover = models.CharField(max_length=500, blank=True, null=True)
 
     class Meta:
         db_table = 'post'

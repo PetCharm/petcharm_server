@@ -199,10 +199,12 @@ class AllPostsView(APIView):
         posts_info = []
         for post in posts:
             post_info = {
-                "postId": post.id,
-                "postTitle": post.title,
-                "postContent": post.content,
-                "postDate": post.date
+                "postId": post.post_id,
+                "postTitle": post.post_title,
+                "postContent": post.post_content,
+                "postDate": post.post_date,
+                "postAuthor": post.post_user.first_name + post.post_user.last_name,
+                "postCover": post.post_cover,
             }
             posts_info.append(post_info)
         return JsonResponse(posts_info, safe=False)

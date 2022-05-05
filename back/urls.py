@@ -39,6 +39,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path(r'api-auth/', include(('rest_framework.urls', 'rest_framework'), namespace="api-auth")),
     re_path(r'^doc(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('doc/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
@@ -50,8 +51,7 @@ urlpatterns = [
     path('api/getPetInfo/', myapp.views.get_pet_info),
     path('api/getVerificationCode/', myapp.views.get_verification_code),
     path('api/verifyCode/', myapp.views.verify_code),
-    path('api/getUserInfo/', myapp.views.get_user_info),
-    path('api/setUserInfo/', myapp.views.set_user_info),
+    path('api/userInfo/', myapp.views.UserInfo.as_view()),
     path('api/getAllPost/', myapp.views.get_all_posts),
     path('api/getPostComment/', myapp.views.get_post_comments),
     path('api/getUserIMToken/', myapp.views.get_user_im_token),

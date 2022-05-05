@@ -4,7 +4,9 @@ from django.contrib import auth
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
+from rest_framework.views import APIView
 
 from myapp.models import *
 import myapp.verification as verification
@@ -15,6 +17,41 @@ import logging
 from myapp.serializers import UserSerializer
 
 logger = logging.getLogger(__name__)
+
+
+class UserInfo(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取用户信息',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        user_info = {
+            "userName": user.username,
+            "userFirstName": user.first_name,
+            "userLastName": user.last_name,
+            "userIsActive": user.is_active,
+            "userType": user.user_type,
+            "userEmail": user.email,
+            "userIconUrl": user.user_icon_url,
+        }
+        return JsonResponse(user_info)
+
+    @swagger_auto_schema(
+        operation_summary='修改用户信息',
+        response={200: 'OK'}
+    )
+    def post(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        user.first_name = request.POST.get("userFirstName")
+        user.last_name = request.POST.get("userLastName")
+        user.email = request.POST.get("userEmail")
+        user.set_password(request.POST.get("userPassword"))
+        user.user_icon_url = request.POST.get("userIconUrl")
+        user.save()
+        return JsonResponse({"success": True, "message": "用户信息设置成功"})
 
 
 @csrf_exempt
@@ -119,35 +156,6 @@ def verify_code_and_change_password(request):
     return JsonResponse({"success": False, "message": "验证码错误"})
 
 
-def get_user_info(request):
-    user_id = request.session.get('_auth_user_id')
-    user = User.objects.get(id=user_id)
-    user_info = {
-        "userName": user.username,
-        "userFirstName": user.first_name,
-        "userLastName": user.last_name,
-        "userIsActive": user.is_active,
-        "userType": user.user_type,
-        "userEmail": user.email,
-        "userIconUrl": user.user_icon_url,
-    }
-    return JsonResponse(user_info)
-
-
-def set_user_info(request):
-    if request.method == "GET":
-        return render(request, "set_user_info.html")
-    user_id = request.session.get('_auth_user_id')
-    user = User.objects.get(id=user_id)
-    user.first_name = request.POST.get("userFirstName")
-    user.last_name = request.POST.get("userLastName")
-    user.email = request.POST.get("userEmail")
-    user.set_password(request.POST.get("userPassword"))
-    user.user_icon_url = request.POST.get("userIconUrl")
-    user.save()
-    return JsonResponse({"success": True, "message": "用户信息设置成功"})
-
-
 def get_all_posts(request):
     posts = Post.objects.all()
     posts_info = []
@@ -194,24 +202,3 @@ def get_all_unadopted_pets(request):
     for pet in pets:
         pets_info.append(info.get_pet_info(pet))
     return JsonResponse({"pets_info": pets_info})
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    """
-        retrieve:
-            返回用户实例
-        list:
-            返回所有用户，按最近加入的用户排序
-        create:
-            创建新用户
-        delete:
-            删除现有用户
-        partial_update:
-            更新现有用户上的一个或多个字段
-        update:
-            更新用户
-    """
-    '''查看，编辑用户的界面'''
-    queryset = User.objects.all().order_by('id')
-    serializer_class = UserSerializer
-    print(serializer_class, type(serializer_class))

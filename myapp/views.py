@@ -152,7 +152,7 @@ class VerificationCodeView(APIView):
         return JsonResponse({"success": False, "message": "验证码错误"})
 
 
-class FindPasswordVerificationCodeView(APIView):
+class RetrievePasswordVerificationCodeView(APIView):
     @swagger_auto_schema(
         operation_summary='获取验证码',
         response={200: 'OK'}
@@ -166,7 +166,7 @@ class FindPasswordVerificationCodeView(APIView):
         return JsonResponse({"success": True, "message": "验证码已发送"})
 
 
-class FindPasswordView(APIView):
+class RetrievePasswordView(APIView):
     @swagger_auto_schema(
         operation_summary='找回密码',
         response={200: 'OK'}
@@ -185,49 +185,68 @@ class FindPasswordView(APIView):
         return JsonResponse({"success": False, "message": "验证码错误"})
 
 
-def get_all_posts(request):
-    posts = Post.objects.all()
-    posts_info = []
-    for post in posts:
-        post_info = {
-            "postId": post.id,
-            "postTitle": post.title,
-            "postContent": post.content,
-            "postDate": post.date
-        }
-        posts_info.append(post_info)
-    return JsonResponse(posts_info, safe=False)
+class AllPostsView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取所有帖子',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        posts = Post.objects.all()
+        posts_info = []
+        for post in posts:
+            post_info = {
+                "postId": post.id,
+                "postTitle": post.title,
+                "postContent": post.content,
+                "postDate": post.date
+            }
+            posts_info.append(post_info)
+        return JsonResponse(posts_info, safe=False)
 
 
-def get_post_comments(request):
-    post_id = request.GET.get("postId")
-    post = Post.objects.get(id=post_id)
-    comments = Comment.objects.all().filter(post=post)
-    comments_info = []
-    for comment in comments:
-        comment_info = {
-            "commentId": comment.id,
-            "commentContent": comment.content,
-            "commentDate": comment.date
-        }
-        comments_info.append(comment_info)
-    return JsonResponse(comments_info, safe=False)
+class AllCommentsView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取所有评论',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        post_id = request.GET.get("postId")
+        post = Post.objects.get(id=post_id)
+        comments = Comment.objects.all().filter(post=post)
+        comments_info = []
+        for comment in comments:
+            comment_info = {
+                "commentId": comment.id,
+                "commentContent": comment.content,
+                "commentDate": comment.date
+            }
+            comments_info.append(comment_info)
+        return JsonResponse(comments_info, safe=False)
 
 
-@csrf_exempt
-def get_user_im_token(request):
-    user_id = request.session.get('_auth_user_id')
-    user = User.objects.get(id=user_id)
-    im_token = openIM.get_token(user.username)
-    return JsonResponse({"token": im_token})
+class IMTokenView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取用户IMToken',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        token = user.im_token
+        return JsonResponse({"success": True, "token": token})
 
 
-def get_all_unadopted_pets(request):
-    adopted_pets = []
-    for user in User.objects.all():
-        adopted_pets.append(user.pet)
-    pets = Pet.objects.all() - adopted_pets
-    pets_info = []
-    for pet in pets:
-        pets_info.append(info.get_pet_info(pet))
-    return JsonResponse({"pets_info": pets_info})
+class AllUnadoptedPetsView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取所有未领养宠物',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        adopted_pets = []
+        for user in User.objects.all():
+            adopted_pets.append(user.pet)
+        pets = Pet.objects.all() - adopted_pets
+        pets_info = []
+        for pet in pets:
+            pets_info.append(info.get_pet_info(pet))
+        return JsonResponse({"pets_info": pets_info})

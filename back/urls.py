@@ -31,8 +31,6 @@ schema_view = get_schema_view(
         default_version='0.1',
         description="欢迎来到PetCharm接口文档",
         terms_of_service="http://43.138.31.99/doc/",
-        contact=openapi.Contact(email="z@mcac.cc"),
-        license=openapi.License(name="43.138.31.99"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),

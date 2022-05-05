@@ -55,6 +55,7 @@ class LoginView(APIView):
         operation_summary='用户登录',
         response={200: 'OK'}
     )
+    @csrf_exempt
     def post(self, request):
         username = request.POST.get("userName")
         password = request.POST.get("userPassword")
@@ -70,6 +71,7 @@ class RegisterView(APIView):
         operation_summary='用户注册',
         response={200: 'OK'}
     )
+    @csrf_exempt
     def post(self, request):
         username = request.POST.get("userName")
         password = request.POST.get("userPassword")
@@ -78,6 +80,7 @@ class RegisterView(APIView):
         if user is not None:
             user.is_active = False
             token = openIM.register(user.username)
+            auth.login(request, user)
             return JsonResponse({"success": True, "message": "注册成功", "im_token": token})
         return JsonResponse({"success": False, "message": "用户名已存在"})
 
@@ -87,6 +90,7 @@ class LogoutView(APIView):
         operation_summary='用户注销',
         response={200: 'OK'}
     )
+    @csrf_exempt
     def get(self, request):
         auth.logout(request)
         return JsonResponse({"success": True, "message": "注销成功"})

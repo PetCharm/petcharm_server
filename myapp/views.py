@@ -192,7 +192,7 @@ class AllPostsView(APIView):
         response={200: 'OK'}
     )
     def get(self, request):
-        posts = Post.objects.all()
+        posts = Post.objects.all().order_by("-post_date")
         posts_info = []
         for post in posts:
             post_info = {

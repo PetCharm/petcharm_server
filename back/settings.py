@@ -40,6 +40,12 @@ INSTALLED_APPS = [
     'drf_yasg',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
 AUTH_USER_MODEL = 'myapp.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

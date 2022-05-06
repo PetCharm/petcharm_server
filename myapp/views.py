@@ -1,4 +1,4 @@
-from datetime import timezone
+from datetime import timezone, timedelta
 
 from django.contrib import auth
 from django.http import JsonResponse
@@ -55,7 +55,6 @@ class LoginView(APIView):
         operation_summary='用户登录',
         response={200: 'OK'}
     )
-    @csrf_exempt
     def post(self, request):
         username = request.POST.get("userName")
         password = request.POST.get("userPassword")
@@ -71,7 +70,6 @@ class RegisterView(APIView):
         operation_summary='用户注册',
         response={200: 'OK'}
     )
-    @csrf_exempt
     def post(self, request):
         username = request.POST.get("userName")
         password = request.POST.get("userPassword")
@@ -90,7 +88,6 @@ class LogoutView(APIView):
         operation_summary='用户注销',
         response={200: 'OK'}
     )
-    @csrf_exempt
     def get(self, request):
         auth.logout(request)
         return JsonResponse({"success": True, "message": "注销成功"})
@@ -202,7 +199,7 @@ class AllPostsView(APIView):
                 "postId": post.post_id,
                 "postTitle": post.post_title,
                 "postContent": post.post_content,
-                "postDate": post.post_date,
+                "postDate": post.post_date.strftime("%Y-%m-%d %H:%M"),
                 "postAuthor": post.post_user.first_name + post.post_user.last_name,
                 "postCover": post.post_cover,
             }
@@ -256,3 +253,22 @@ class AllUnadoptedPetsView(APIView):
         for pet in pets:
             pets_info.append(info.get_pet_info(pet))
         return JsonResponse({"pets_info": pets_info})
+
+
+class PostView(APIView):
+    @swagger_auto_schema(
+        operation_summary='发布帖子',
+        response={200: 'OK'}
+    )
+    def post(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        post_title = request.POST.get("postTitle")
+        post_content = request.POST.get("postContent")
+        post_cover = request.POST.get("postCover")
+        if post_cover is None:
+            post_cover = "https://pic.mcatk.com/soto/202205061633426.png"
+        post = Post(post_user=user, post_title=post_title, post_content=post_content, post_cover=post_cover)
+        post.post_date = datetime.now() + timedelta(hours=8)
+        post.save()
+        return JsonResponse({"success": True, "message": "帖子发布成功"})

@@ -54,5 +54,6 @@ urlpatterns = [
     path('api/retrievePassword/', myapp.views.RetrievePasswordView.as_view()),
     path('api/retrievePasswordVerificationCode/', myapp.views.RetrievePasswordVerificationCodeView.as_view()),
     path('api/allUnadoptedPets/', myapp.views.AllUnadoptedPetsView.as_view()),
+    path('api/post/', myapp.views.PostView.as_view()),
     url(r'^', TemplateView.as_view(template_name="index.html")),
 ]

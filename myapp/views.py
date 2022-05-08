@@ -266,7 +266,8 @@ class PostView(APIView):
         user = User.objects.get(id=user_id)
         post_title = request.POST.get("postTitle")
         post_content = request.POST.get("postContent")
-        post_cover = request.POST.get("postCover")
+        img = request.FILES.get("postCover")
+        post_cover = image.upload_image(img)
         if post_cover is None:
             post_cover = "https://pic.mcatk.com/soto/202205061633426.png"
         post = Post(post_user=user, post_title=post_title, post_content=post_content, post_cover=post_cover)
@@ -278,6 +279,4 @@ class PostView(APIView):
 def test(request):
     obj = request.FILES.get("test")
     image.upload_image(obj)
-    print(type(obj))
-    print(obj)
     return JsonResponse({"success": True, "message": "测试成功"})

@@ -24,3 +24,12 @@ def get_user_info(user):
         "userEmail": user.email,
         "userIconUrl": user.user_icon_url,
     }
+
+
+def get_application_info(application):
+    return {
+        "applicationId": application.application_id,
+        "applicationUser": application.application_user,
+        "applicationImage": application.application_image,
+        "applicationDate": application.application_date,
+    }

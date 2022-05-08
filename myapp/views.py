@@ -273,6 +273,22 @@ def test(request):
     return JsonResponse({"success": True, "message": "测试成功"})
 
 
+class ApplicationView(APIView):
+    @swagger_auto_schema(
+        operation_summary='申请兽医/护工资格认证',
+        response={200: 'OK'}
+    )
+    def post(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        application_type = request.POST.get("applicationType")
+        img = request.FILES.get("applicationImage")
+        application_image = image.upload_image(img)
+        application = Application(user=user, application_type=application_type, application_image=application_image)
+        application.save()
+        return JsonResponse({"success": True, "message": "申请成功"})
+
+
 # admin
 
 class AdminUserView(APIView):
@@ -305,3 +321,55 @@ class AdminAllUserView(APIView):
         for user in users:
             user_list.append(info.get_user_info(user))
         return JsonResponse({"success": True, 'users': user_list})
+
+
+class AdminApplicationListView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取申请兽医/护工资格认证列表',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        if not user.is_staff:
+            return JsonResponse({"success": False, "message": "没有权限"})
+        applications = Application.objects.all()
+        application_list = []
+        for application in applications:
+            application_list.append(info.get_application_info(application))
+        return JsonResponse({"success": True, 'applications': application_list})
+
+
+class AdminAgreeApplicationView(APIView):
+    @swagger_auto_schema(
+        operation_summary='通过兽医/护工资格认证申请',
+        response={200: 'OK'}
+    )
+    def post(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        if not user.is_staff:
+            return JsonResponse({"success": False, "message": "没有权限"})
+        application_id = request.POST.get("applicationId")
+        application = Application.objects.get(id=application_id)
+        application_user = application.user
+        application_user.user_type = application.application_type
+        application_user.save()
+        application.delete()
+        return JsonResponse({"success": True, "message": "处理成功"})
+
+
+class AdminRejectApplicationView(APIView):
+    @swagger_auto_schema(
+        operation_summary='拒绝兽医/护工资格认证申请',
+        response={200: 'OK'}
+    )
+    def post(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        if not user.is_staff:
+            return JsonResponse({"success": False, "message": "没有权限"})
+        application_id = request.POST.get("applicationId")
+        application = Application.objects.get(id=application_id)
+        application.delete()
+        return JsonResponse({"success": True, "message": "处理成功"})

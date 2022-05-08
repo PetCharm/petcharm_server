@@ -12,3 +12,15 @@ def get_pet_info(pet):
         "petAge": (datetime.now() - pet.pet_date_of_birth).days,
         "petRegistrationNumber": pet.pet_registration_number,
     }
+
+
+def get_user_info(user):
+    return {
+        "userName": user.username,
+        "userFirstName": user.first_name,
+        "userLastName": user.last_name,
+        "userIsActive": user.is_active,
+        "userType": user.user_type,
+        "userEmail": user.email,
+        "userIconUrl": user.user_icon_url,
+    }

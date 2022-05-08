@@ -56,5 +56,7 @@ urlpatterns = [
     path('api/allUnadoptedPets/', myapp.views.AllUnadoptedPetsView.as_view()),
     path('api/post/', myapp.views.PostView.as_view()),
     path('api/test/', myapp.views.test),
+    path('api/admin/userInfo/', myapp.views.AdminUserView.as_view()),
+    path('api/admin/allUsers', myapp.views.AdminAllUserView.as_view()),
     url(r'^', TemplateView.as_view(template_name="index.html")),
 ]

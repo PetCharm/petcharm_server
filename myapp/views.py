@@ -1,8 +1,7 @@
-from datetime import timezone, timedelta
+from datetime import timedelta
 
 from django.contrib import auth
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 
@@ -24,15 +23,7 @@ class UserInfo(APIView):
     def get(self, request):
         user_id = request.session.get('_auth_user_id')
         user = User.objects.get(id=user_id)
-        user_info = {
-            "userName": user.username,
-            "userFirstName": user.first_name,
-            "userLastName": user.last_name,
-            "userIsActive": user.is_active,
-            "userType": user.user_type,
-            "userEmail": user.email,
-            "userIconUrl": user.user_icon_url,
-        }
+        user_info = info.get_user_info(user)
         return JsonResponse(user_info)
 
     @swagger_auto_schema(
@@ -280,3 +271,37 @@ def test(request):
     obj = request.FILES.get("test")
     image.upload_image(obj)
     return JsonResponse({"success": True, "message": "测试成功"})
+
+
+# admin
+
+class AdminUserView(APIView):
+    @swagger_auto_schema(
+        operation_summary='通过用户名获取用户信息',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        if not user.is_staff:
+            return JsonResponse({"success": False, "message": "没有权限"})
+        username = request.POST.get("username")
+        user = User.objects.get(username=username)
+        return JsonResponse({"success": True, 'user': info.get_user_info(user)})
+
+
+class AdminAllUserView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取用户全部信息',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        if not user.is_staff:
+            return JsonResponse({"success": False, "message": "没有权限"})
+        users = User.objects.all()
+        user_list = []
+        for user in users:
+            user_list.append(info.get_user_info(user))
+        return JsonResponse({"success": True, 'users': user_list})

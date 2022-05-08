@@ -59,6 +59,7 @@ urlpatterns = [
     path('api/apply/', myapp.views.ApplicationView.as_view()),
     path('api/admin/userInfo/', myapp.views.AdminUserView.as_view()),
     path('api/admin/allUsers', myapp.views.AdminAllUserView.as_view()),
+    path('api/admin/allApplications', myapp.views.AdminApplicationListView.as_view()),
     path('api/admin/application/agree', myapp.views.AdminAgreeApplicationView.as_view()),
     path('api/admin/application/reject', myapp.views.AdminRejectApplicationView.as_view()),
     url(r'^', TemplateView.as_view(template_name="index.html")),

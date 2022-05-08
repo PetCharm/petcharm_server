@@ -137,3 +137,4 @@ class Application(models.Model):
     application_id = models.AutoField(primary_key=True)
     application_image = models.CharField(max_length=200, blank=True, null=True)
     application_user = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True)
+    application_date = models.DateTimeField(blank=True, null=True)

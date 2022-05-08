@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 
+from myapp import image
 from myapp.models import *
 import myapp.verification as verification
 import myapp.openIM as openIM
@@ -272,3 +273,11 @@ class PostView(APIView):
         post.post_date = datetime.now() + timedelta(hours=8)
         post.save()
         return JsonResponse({"success": True, "message": "帖子发布成功"})
+
+
+def test(request):
+    obj = request.FILES.get("test")
+    image.upload_image(obj)
+    print(type(obj))
+    print(obj)
+    return JsonResponse({"success": True, "message": "测试成功"})

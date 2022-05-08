@@ -37,6 +37,7 @@ class Pet(models.Model):
     pet_gender = models.CharField(max_length=100, blank=True, null=True)
     pet_date_of_birth = models.DateTimeField(blank=True, null=True)
     pet_registration_number = models.CharField(max_length=100, blank=True, null=True)
+    pet_vaccination_status = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'pet'

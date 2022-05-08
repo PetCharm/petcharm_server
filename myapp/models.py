@@ -131,3 +131,9 @@ class EmailVerificationCode(models.Model):
 
     def __unicode__(self):
         return '{0}({1})'.format(self.code, self.email)
+
+
+class Application(models.Model):
+    application_id = models.AutoField(primary_key=True)
+    application_image = models.CharField(max_length=200, blank=True, null=True)
+    application_user = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True)

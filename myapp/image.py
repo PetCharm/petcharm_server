@@ -13,6 +13,6 @@ def upload_image(image):
 
     result = bucket.put_object(random_name, image)
     if result.status == 200:
-        url = 'pic.petcharm.mcatk.com/' + random_name
+        url = 'http://pic.petcharm.mcatk.com/' + random_name
         return url
     return None

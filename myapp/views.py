@@ -284,7 +284,9 @@ class ApplicationView(APIView):
         application_type = request.POST.get("applicationType")
         img = request.FILES.get("applicationImage")
         application_image = image.upload_image(img)
-        application = Application(user=user, application_type=application_type, application_image=application_image)
+        application_description = request.POST.get("applicationDescription")
+        application = Application(user=user, application_type=application_type, application_image=application_image,
+                                  application_description=application_description)
         application.save()
         return JsonResponse({"success": True, "message": "申请成功"})
 

@@ -32,4 +32,5 @@ def get_application_info(application):
         "applicationUser": application.application_user,
         "applicationImage": application.application_image,
         "applicationDate": application.application_date,
+        "applicationDescription": application.application_description,
     }

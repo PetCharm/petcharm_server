@@ -94,8 +94,10 @@ class PetView(APIView):
         user_id = request.session.get('_auth_user_id')
         user = User.objects.get(id=user_id)
         pet = user.pet
+        if pet is None:
+            return JsonResponse({"success": False, "message": "用户没有宠物"})
         pet_info = info.get_pet_info(pet)
-        return JsonResponse(pet_info)
+        return JsonResponse({"success": True, "message": "获取宠物信息成功", "pet": pet_info})
 
     @swagger_auto_schema(
         operation_summary='修改宠物信息',
@@ -196,7 +198,7 @@ class AllPostsView(APIView):
                 "postCover": post.post_cover,
             }
             posts_info.append(post_info)
-        return JsonResponse(posts_info, safe=False)
+        return JsonResponse({"success": True, "message": "获取帖子成功", "posts": posts_info})
 
 
 class AllCommentsView(APIView):
@@ -216,7 +218,7 @@ class AllCommentsView(APIView):
                 "commentDate": comment.date
             }
             comments_info.append(comment_info)
-        return JsonResponse(comments_info, safe=False)
+        return JsonResponse({"success": True, "message": "获取评论成功", "comments": comments_info})
 
 
 class IMTokenView(APIView):
@@ -244,7 +246,7 @@ class AllUnadoptedPetsView(APIView):
         pets_info = []
         for pet in pets:
             pets_info.append(info.get_pet_info(pet))
-        return JsonResponse({"pets_info": pets_info})
+        return JsonResponse({"success": True, "message": "获取宠物成功", "pets": pets_info})
 
 
 class PostView(APIView):

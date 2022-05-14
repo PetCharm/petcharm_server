@@ -34,3 +34,14 @@ def get_application_info(application):
         "applicationDate": application.application_date,
         "applicationDescription": application.application_description,
     }
+
+
+def get_post_info(post):
+    return {
+        "postId": post.post_id,
+        "postTitle": post.post_title,
+        "postContent": post.post_content,
+        "postDate": post.post_date.strftime("%Y-%m-%d %H:%M"),
+        "postAuthor": post.post_user.first_name + post.post_user.last_name,
+        "postCover": post.post_cover,
+    }

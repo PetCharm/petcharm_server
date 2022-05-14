@@ -189,14 +189,7 @@ class AllPostsView(APIView):
         posts = Post.objects.all().order_by("-post_date")
         posts_info = []
         for post in posts:
-            post_info = {
-                "postId": post.post_id,
-                "postTitle": post.post_title,
-                "postContent": post.post_content,
-                "postDate": post.post_date.strftime("%Y-%m-%d %H:%M"),
-                "postAuthor": post.post_user.first_name + post.post_user.last_name,
-                "postCover": post.post_cover,
-            }
+            post_info = info.get_post_info(post)
             posts_info.append(post_info)
         return JsonResponse({"success": True, "message": "获取帖子成功", "posts": posts_info})
 
@@ -267,6 +260,22 @@ class PostView(APIView):
         post.post_date = datetime.now() + timedelta(hours=8)
         post.save()
         return JsonResponse({"success": True, "message": "帖子发布成功"})
+
+
+class UserPostsView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取用户帖子',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        posts = Post.objects.all().filter(post_user=user).order_by("-post_date")
+        posts_info = []
+        for post in posts:
+            post_info = info.get_post_info(post)
+            posts_info.append(post_info)
+        return JsonResponse({"success": True, "message": "获取帖子成功", "posts": posts_info})
 
 
 def test(request):

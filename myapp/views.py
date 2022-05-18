@@ -286,6 +286,21 @@ class UserPostsView(APIView):
         return JsonResponse({"success": True, "message": "获取帖子成功", "posts": posts_info})
 
 
+class UserDeletesPostView(APIView):
+    @swagger_auto_schema(
+        operation_summary='用户删除帖子',
+        responses={200: 'OK'}
+    )
+    def post(self, request):
+        user = User.objects.get(id=request.session.get('_auth_user_id'))
+        post_id = request.POST.get("postId")
+        post = Post.objects.get(id=post_id)
+        if post.post_user != user:
+            return JsonResponse({"success": False, "message": "无权限删除"})
+        post.delete()
+        return JsonResponse({"success": True, "message": "删除帖子成功"})
+
+
 def test(request):
     obj = request.FILES.get("test")
     image.upload_image(obj)

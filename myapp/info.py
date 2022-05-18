@@ -45,3 +45,12 @@ def get_post_info(post):
         "postAuthor": post.post_user.first_name + post.post_user.last_name,
         "postCover": post.post_cover,
     }
+
+
+def get_comment_info(comment):
+    return {
+        "commentId": comment.comment_id,
+        "commentContent": comment.comment_content,
+        "commentDate": comment.comment_date.strftime("%Y-%m-%d %H:%M"),
+        "commentAuthor": comment.comment_user.first_name + comment.comment_user.last_name,
+    }

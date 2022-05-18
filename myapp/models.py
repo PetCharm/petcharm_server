@@ -16,6 +16,7 @@ class Comment(models.Model):
     comment_content = models.CharField(max_length=500, blank=True, null=True)
     comment_post = models.ForeignKey('Post', models.DO_NOTHING, blank=True, null=True)
     comment_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True)
+    comment_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         db_table = 'comment'

@@ -213,11 +213,7 @@ class AllCommentsView(APIView):
         comments = Comment.objects.all().filter(post=post)
         comments_info = []
         for comment in comments:
-            comment_info = {
-                "commentId": comment.id,
-                "commentContent": comment.content,
-                "commentDate": comment.date
-            }
+            comment_info = info.get_comment_info(comment)
             comments_info.append(comment_info)
         return JsonResponse({"success": True, "message": "获取评论成功", "comments": comments_info})
 
@@ -238,6 +234,7 @@ class CommentView(APIView):
         comment.comment_content = request.POST.get("commentContent")
         comment.comment_user = user
         comment.comment_post = post
+        comment.comment_date = datetime.now() + timedelta(hours=8)
         comment.save()
         return JsonResponse({"success": True, "message": "评论成功"})
 

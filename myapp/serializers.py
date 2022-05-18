@@ -1,9 +1,11 @@
 # 序列化
-from django.contrib.auth.models import User
+
 from rest_framework import serializers
+
+from myapp.models import User
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ['id', 'username', 'first_name', 'email', 'user_icon_url']

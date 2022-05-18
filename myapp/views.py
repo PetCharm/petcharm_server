@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.contrib import auth
 from django.http import JsonResponse
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework import viewsets
 from rest_framework.views import APIView
 
 from myapp import image
@@ -12,7 +13,14 @@ import myapp.openIM as openIM
 import myapp.info as info
 import logging
 
+from myapp.serializers import UserSerializer
+
 logger = logging.getLogger(__name__)
+
+
+# class UserViewSet(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
 
 
 class UserInfo(APIView):

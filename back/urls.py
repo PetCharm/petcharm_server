@@ -21,7 +21,7 @@ from django.views.generic import TemplateView
 from drf_yasg import openapi
 from drf_yasg.renderers import OpenAPIRenderer, SwaggerUIRenderer
 from drf_yasg.views import get_schema_view
-from rest_framework import permissions
+from rest_framework import permissions, routers
 
 import myapp.views
 
@@ -36,8 +36,12 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+router = routers.DefaultRouter()
+# router.register(r'users', myapp.views.UserViewSet)
+
 urlpatterns = [
-    path(r'api-auth/', include(('rest_framework.urls', 'rest_framework'), namespace="api-auth")),
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     re_path(r'^doc(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('doc/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

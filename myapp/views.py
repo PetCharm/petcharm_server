@@ -222,6 +222,26 @@ class AllCommentsView(APIView):
         return JsonResponse({"success": True, "message": "获取评论成功", "comments": comments_info})
 
 
+class CommentView(APIView):
+    @swagger_auto_schema(
+        operation_summary='添加评论',
+        response={200: 'OK'}
+    )
+    def post(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        post_id = request.POST.get("postId")
+        if post_id is None:
+            return JsonResponse({"success": False, "message": "帖子不存在"})
+        post = Post.objects.get(id=post_id)
+        comment = Comment()
+        comment.comment_content = request.POST.get("commentContent")
+        comment.comment_user = user
+        comment.comment_post = post
+        comment.save()
+        return JsonResponse({"success": True, "message": "评论成功"})
+
+
 class IMTokenView(APIView):
     @swagger_auto_schema(
         operation_summary='获取用户IMToken',

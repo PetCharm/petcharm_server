@@ -265,6 +265,16 @@ class AllUnadoptedPetsView(APIView):
                 pets_info.append(info.get_pet_info(pet))
         return JsonResponse({"success": True, "message": "获取宠物成功", "pets": pets_info})
 
+class PetsView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取所有宠物',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        pets_info = []
+        for pet in Pet.objects.all():
+            pets_info.append(info.get_pet_info(pet))
+        return JsonResponse({"success": True, "message": "获取宠物列表成功", "pets": pets_info})
 
 class PostView(APIView):
     @swagger_auto_schema(

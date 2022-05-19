@@ -440,3 +440,20 @@ class UploadImageView(APIView):
         img = request.FILES.get("image")
         image_url = image.upload_image(img)
         return JsonResponse({"success": True, "imageUrl": image_url})
+
+
+class VaccinationView(APIView):
+    @swagger_auto_schema(
+        operation_summary='兽医添加接种记录',
+        response={200: 'OK'}
+    )
+    def post(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        if user.user_type != '兽医':
+            return JsonResponse({"success": False, "message": "没有权限"})
+        pet_id = request.POST.get("petId")
+        pet = Pet.objects.get(id=pet_id)
+        pet.pet_vaccination_status = True
+        pet.save()
+        return JsonResponse({"success": True, "message": "设置成功"})

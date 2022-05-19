@@ -259,10 +259,10 @@ class AllUnadoptedPetsView(APIView):
         adopted_pets = []
         for user in User.objects.all():
             adopted_pets.append(user.pet)
-        pets = Pet.objects.all() - adopted_pets
         pets_info = []
-        for pet in pets:
-            pets_info.append(info.get_pet_info(pet))
+        for pet in Pet.objects.all():
+            if pet not in adopted_pets:
+                pets_info.append(info.get_pet_info(pet))
         return JsonResponse({"success": True, "message": "获取宠物成功", "pets": pets_info})
 
 

@@ -426,3 +426,18 @@ class AdminRejectApplicationView(APIView):
         application = Application.objects.get(id=application_id)
         application.delete()
         return JsonResponse({"success": True, "message": "处理成功"})
+
+
+class UploadImageView(APIView):
+    @swagger_auto_schema(
+        operation_summary='上传图片',
+        response={200: 'OK'}
+    )
+    def post(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        if not user:
+            return JsonResponse({"success": False, "message": "没有权限"})
+        img = request.FILES.get("image")
+        image_url = image.upload_image(img)
+        return JsonResponse({"success": True, "imageUrl": image_url})

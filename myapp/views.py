@@ -322,7 +322,7 @@ class UserDeletesPostView(APIView):
     def post(self, request):
         user = User.objects.get(id=request.session.get('_auth_user_id'))
         post_id = request.POST.get("postId")
-        post = Post.objects.get(id=post_id)
+        post = Post.objects.get(post_id=post_id)
         if post.post_user != user:
             return JsonResponse({"success": False, "message": "无权限删除"})
         post.delete()
@@ -415,7 +415,7 @@ class AdminAgreeApplicationView(APIView):
         if not user.is_staff:
             return JsonResponse({"success": False, "message": "没有权限"})
         application_id = request.POST.get("applicationId")
-        application = Application.objects.get(id=application_id)
+        application = Application.objects.get(application_id=application_id)
         application_user = application.user
         application_user.user_type = application.application_type
         application_user.save()
@@ -434,7 +434,7 @@ class AdminRejectApplicationView(APIView):
         if not user.is_staff:
             return JsonResponse({"success": False, "message": "没有权限"})
         application_id = request.POST.get("applicationId")
-        application = Application.objects.get(id=application_id)
+        application = Application.objects.get(application_id=application_id)
         application.delete()
         return JsonResponse({"success": True, "message": "处理成功"})
 
@@ -465,7 +465,7 @@ class VaccinationView(APIView):
         if user.user_type != '兽医':
             return JsonResponse({"success": False, "message": "没有权限"})
         pet_id = request.POST.get("petId")
-        pet = Pet.objects.get(id=pet_id)
+        pet = Pet.objects.get(pet_id=pet_id)
         pet.pet_vaccination_status = True
         pet.save()
         return JsonResponse({"success": True, "message": "设置成功"})

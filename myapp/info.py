@@ -55,4 +55,5 @@ def get_comment_info(comment):
         "commentContent": comment.comment_content,
         "commentDate": comment.comment_date.strftime("%Y-%m-%d %H:%M"),
         "commentAuthor": comment.comment_user.first_name + comment.comment_user.last_name,
+        "commentIconUrl": comment.comment_user.user_icon_url,
     }

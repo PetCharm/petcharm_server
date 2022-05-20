@@ -209,7 +209,7 @@ class AllCommentsView(APIView):
     def get(self, request):
         post_id = request.GET.get("postId")
         post = Post.objects.get(post_id=post_id)
-        comments = Comment.objects.all().filter(post=post)
+        comments = Comment.objects.all().filter(comment_post=post)
         comments_info = []
         for comment in comments:
             comment_info = info.get_comment_info(comment)

@@ -44,7 +44,7 @@ def get_post_info(post):
         "postTitle": post.post_title,
         "postContent": post.post_content,
         "postDate": post.post_date.strftime("%Y-%m-%d %H:%M"),
-        "postAuthor": post.post_user.first_name + post.post_user.last_name,
+        "postAuthor": post.post_user.first_name,
         "postCover": post.post_cover,
     }
 
@@ -54,6 +54,6 @@ def get_comment_info(comment):
         "commentId": comment.comment_id,
         "commentContent": comment.comment_content,
         "commentDate": comment.comment_date.strftime("%Y-%m-%d %H:%M"),
-        "commentAuthor": comment.comment_user.first_name + comment.comment_user.last_name,
+        "commentAuthor": comment.comment_user.first_name,
         "commentIconUrl": comment.comment_user.user_icon_url,
     }

@@ -208,7 +208,7 @@ class AllCommentsView(APIView):
     )
     def get(self, request):
         post_id = request.GET.get("postId")
-        post = Post.objects.get(id=post_id)
+        post = Post.objects.get(post_id=post_id)
         comments = Comment.objects.all().filter(post=post)
         comments_info = []
         for comment in comments:
@@ -228,7 +228,7 @@ class CommentView(APIView):
         post_id = request.POST.get("postId")
         if post_id is None:
             return JsonResponse({"success": False, "message": "帖子不存在"})
-        post = Post.objects.get(id=post_id)
+        post = Post.objects.get(post_id=post_id)
         comment = Comment()
         comment.comment_content = request.POST.get("commentContent")
         comment.comment_user = user
@@ -265,6 +265,7 @@ class AllUnadoptedPetsView(APIView):
                 pets_info.append(info.get_pet_info(pet))
         return JsonResponse({"success": True, "message": "获取宠物成功", "pets": pets_info})
 
+
 class PetsView(APIView):
     @swagger_auto_schema(
         operation_summary='获取所有宠物',
@@ -275,6 +276,7 @@ class PetsView(APIView):
         for pet in Pet.objects.all():
             pets_info.append(info.get_pet_info(pet))
         return JsonResponse({"success": True, "message": "获取宠物列表成功", "pets": pets_info})
+
 
 class PostView(APIView):
     @swagger_auto_schema(

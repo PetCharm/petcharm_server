@@ -42,9 +42,7 @@ class UserInfo(APIView):
         user_id = request.session.get('_auth_user_id')
         user = User.objects.get(id=user_id)
         user.first_name = request.POST.get("userFirstName")
-        user.last_name = request.POST.get("userLastName")
         user.email = request.POST.get("userEmail")
-        user.user_icon_url = request.POST.get("userIconUrl")
         user.save()
         return JsonResponse({"success": True, "message": "用户信息设置成功"})
 
@@ -60,7 +58,8 @@ class LoginView(APIView):
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
-            return JsonResponse({"success": True, "message": "登录成功"})
+            token = openIM.get_token(user.username)
+            return JsonResponse({"success": True, "message": "登录成功", "im_token": token})
         return JsonResponse({"success": False, "message": "用户名或密码错误"})
 
 
@@ -76,6 +75,8 @@ class RegisterView(APIView):
         user = User.objects.create_user(username=username, password=password, email=email)
         if user is not None:
             user.is_active = False
+            user.first_name = username
+            user.save()
             token = openIM.register(user.username)
             auth.login(request, user)
             return JsonResponse({"success": True, "message": "注册成功", "im_token": token})
@@ -246,8 +247,8 @@ class IMTokenView(APIView):
     def get(self, request):
         user_id = request.session.get('_auth_user_id')
         user = User.objects.get(id=user_id)
-        token = user.im_token
-        return JsonResponse({"success": True, "token": token})
+        token = openIM.get_token(user.username)
+        return JsonResponse({"success": True, "im_token": token})
 
 
 class AllUnadoptedPetsView(APIView):

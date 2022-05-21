@@ -108,21 +108,23 @@ class PetView(APIView):
         return JsonResponse({"success": True, "message": "获取宠物信息成功", "pet": pet_info})
 
     @swagger_auto_schema(
-        operation_summary='修改宠物信息',
+        operation_summary='修改宠物信息,没有则创建',
         response={200: 'OK'}
     )
     def post(self, request):
-        new_pet = Pet()
-        new_pet.pet_name = request.POST.get("petName")
-        new_pet.pet_type = request.POST.get("petType")
-        new_pet.pet_breed = request.POST.get("petBreed")
-        new_pet.pet_gender = request.POST.get("petGender")
-        new_pet.pet_date_of_birth = request.POST.get("petDateOfBirth")
-        new_pet.save()
         user_id = request.session.get('_auth_user_id')
         user = User.objects.get(id=user_id)
-        user.pet = new_pet
-        user.save()
+        if user.pet is None:
+            new_pet = Pet()
+            new_pet.save()
+            user.pet = new_pet
+            user.save()
+        pet = user.pet
+        pet.pet_name = request.POST.get("petName")
+        pet.pet_type = request.POST.get("petType")
+        pet.pet_breed = request.POST.get("petBreed")
+        pet.pet_gender = request.POST.get("petGender")
+        pet.pet_date_of_birth = request.POST.get("petDateOfBirth")
         return JsonResponse({"success": True, "message": "宠物信息设置成功"})
 
 

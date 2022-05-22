@@ -58,3 +58,15 @@ def get_comment_info(comment):
         "commentAuthor": comment.comment_user.first_name,
         "commentIconUrl": comment.comment_user.user_icon_url,
     }
+
+
+def get_trace_path_info(trace_path, complicated=False):
+    info = {
+        "tracePathId": trace_path.trace_path_id,
+        "tracePathStartTime": trace_path.trace_path_start_time,
+        "tracePathEndTime": trace_path.trace_path_end_time,
+        "tracePathNote": trace_path.trace_path_note,
+    }
+    if complicated:
+        info["tracePathCoordinates"] = trace_path.trace_path_coordinates
+    return info

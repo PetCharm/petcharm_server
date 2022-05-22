@@ -13,7 +13,7 @@ import myapp.openIM as openIM
 import myapp.info as info
 import logging
 
-from myapp.serializers import UserSerializer
+from myapp.serializers import UserSerializer, TracePathSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -472,3 +472,45 @@ class VaccinationView(APIView):
         pet.pet_vaccination_status = True
         pet.save()
         return JsonResponse({"success": True, "message": "设置成功"})
+
+
+class TracePathView(APIView):
+    @swagger_auto_schema(
+        operation_summary='查询追踪记录',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        trace_path_id = request.GET.get("tracePathId")
+        trace_path = TracePath.objects.filter(trace_path_id=trace_path_id)
+        return JsonResponse({"success": True, "tracePath": info.get_trace_path_info(trace_path, complicated=True)})
+
+    @swagger_auto_schema(
+        operation_summary='添加追踪记录',
+        response={200: 'OK'}
+    )
+    def post(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        trace_path_coordinates = request.POST.get("tracePathCoordinates")
+        trace_path_start_time = request.POST.get("tracePathStartTime")
+        trace_path_end_time = request.POST.get("tracePathEndTime")
+        trace_path_note = request.POST.get("tracePathNote")
+        TracePath(user=user, trace_path_coordinates=trace_path_coordinates,
+                  trace_path_start_time=trace_path_start_time, trace_path_end_time=trace_path_end_time,
+                  trace_path_note=trace_path_note).save()
+        return JsonResponse({"success": True, "message": "设置成功"})
+
+
+class TracePathListView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取追踪记录列表',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        trace_paths = TracePath.objects.filter(user=user)
+        trace_path_list = []
+        for trace_path in trace_paths:
+            trace_path_list.append(info.get_trace_path_info(trace_path))
+        return JsonResponse({"success": True, "tracePaths": trace_path_list})

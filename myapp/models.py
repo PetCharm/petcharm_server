@@ -143,3 +143,15 @@ class Application(models.Model):
 
     class Meta:
         db_table = 'application'
+
+
+class TracePath(models.Model):
+    trace_path_id = models.AutoField(primary_key=True)
+    trace_path_user = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True)
+    trace_path_coordinates_url = models.CharField(max_length=200, blank=True, null=True)
+    trace_path_start_time = models.DateTimeField(blank=True, null=True)
+    trace_path_end_time = models.DateTimeField(blank=True, null=True)
+    trace_path_note = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        db_table = 'trace_path'

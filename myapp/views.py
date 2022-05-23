@@ -495,7 +495,7 @@ class TracePathView(APIView):
         trace_path_start_time = request.POST.get("tracePathStartTime")
         trace_path_end_time = request.POST.get("tracePathEndTime")
         trace_path_note = request.POST.get("tracePathNote")
-        TracePath(user=user, trace_path_coordinates=trace_path_coordinates,
+        TracePath(trace_path_user=user, trace_path_coordinates=trace_path_coordinates,
                   trace_path_start_time=trace_path_start_time, trace_path_end_time=trace_path_end_time,
                   trace_path_note=trace_path_note).save()
         return JsonResponse({"success": True, "message": "设置成功"})
@@ -509,7 +509,7 @@ class TracePathListView(APIView):
     def get(self, request):
         user_id = request.session.get('_auth_user_id')
         user = User.objects.get(id=user_id)
-        trace_paths = TracePath.objects.filter(user=user)
+        trace_paths = TracePath.objects.filter(trace_path_user=user)
         trace_path_list = []
         for trace_path in trace_paths:
             trace_path_list.append(info.get_trace_path_info(trace_path))

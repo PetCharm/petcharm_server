@@ -14,7 +14,8 @@ Python库见requirements
 
 ## 模型ER图
 
-![](https://pic.mcatk.com/soto/202204130017572.png)
+![petcharm](https://user-images.githubusercontent.com/59144459/169692088-499fdbd5-4a8f-4658-b8f8-913ad5116e7f.png)
+
 
 
 ## 模型

@@ -481,7 +481,7 @@ class TracePathView(APIView):
     )
     def get(self, request):
         trace_path_id = request.GET.get("tracePathId")
-        trace_path = TracePath.objects.filter(trace_path_id=trace_path_id)
+        trace_path = TracePath.objects.get(trace_path_id=trace_path_id)
         return JsonResponse({"success": True, "tracePath": info.get_trace_path_info(trace_path, complicated=True)})
 
     @swagger_auto_schema(

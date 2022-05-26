@@ -72,15 +72,11 @@ class RegisterView(APIView):
         username = request.POST.get("userName")
         password = request.POST.get("userPassword")
         email = request.POST.get("userEmail")
-        user = User.objects.create_user(username=username, password=password, email=email)
-        if user is not None:
-            user.is_active = False
-            user.first_name = username
-            user.save()
-            token = openIM.register(user.username)
-            auth.login(request, user)
-            return JsonResponse({"success": True, "message": "注册成功", "im_token": token})
-        return JsonResponse({"success": False, "message": "用户名已存在"})
+        if len(User.objects.filter(username=username)) > 0:
+            return JsonResponse({"success": False, "message": "用户名已存在"})
+        User.objects.create_user(username=username, password=password, email=email)
+        token = openIM.register(username)
+        return JsonResponse({"success": True, "message": "注册成功", "im_token": token})
 
 
 class LogoutView(APIView):

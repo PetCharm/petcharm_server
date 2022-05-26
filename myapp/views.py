@@ -317,6 +317,22 @@ class UserPostsView(APIView):
         return JsonResponse({"success": True, "message": "获取帖子成功", "posts": posts_info})
 
 
+class UserCommentsView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取用户评论',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        comments = Comment.objects.all().filter(comment_user=user).order_by("-comment_date")
+        comments_info = []
+        for comment in comments:
+            comment_info = info.get_comment_info(comment)
+            comments_info.append(comment_info)
+        return JsonResponse({"success": True, "message": "获取评论成功", "comments": comments_info})
+
+
 class UserDeletesPostView(APIView):
     @swagger_auto_schema(
         operation_summary='用户删除帖子',

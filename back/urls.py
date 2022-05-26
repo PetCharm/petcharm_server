@@ -39,7 +39,6 @@ schema_view = get_schema_view(
 router = routers.DefaultRouter()
 # router.register(r'users', myapp.views.UserViewSet)
 # router.register(r'trace_paths', myapp.views.TracePathViewSet)
-
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
@@ -52,8 +51,9 @@ urlpatterns = [
     path('api/logout/', myapp.views.LogoutView.as_view()),
     path('api/verificationCode/', myapp.views.VerificationCodeView.as_view()),
     path('api/user/', myapp.views.UserInfo.as_view()),
-    path('api/comment/list/', myapp.views.AllCommentsView.as_view()),
     path('api/comment/', myapp.views.CommentView.as_view()),
+    path('api/comment/list/', myapp.views.AllCommentsView.as_view()),
+    path('api/comment/user/', myapp.views.UserCommentsView.as_view()),
     path('api/IMToken/', myapp.views.IMTokenView.as_view()),
     path('api/retrievePassword/', myapp.views.RetrievePasswordView.as_view()),
     path('api/retrievePasswordVerificationCode/', myapp.views.RetrievePasswordVerificationCodeView.as_view()),
@@ -77,3 +77,4 @@ urlpatterns = [
     path('api/tracePath/list/', myapp.views.TracePathListView.as_view()),
     url(r'^', TemplateView.as_view(template_name="index.html")),
 ]
+

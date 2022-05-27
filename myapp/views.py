@@ -145,11 +145,10 @@ class VerificationCodeView(APIView):
         code = request.POST.get("code")
         records = EmailVerificationCode.objects.filter(code=code)
         for record in records:
-            if record.user.id == user.id:
-                user.is_active = True
-                user.save()
-                record.delete()
-                return JsonResponse({"success": True, "message": "验证码正确"})
+            user.is_active = True
+            user.save()
+            record.delete()
+            return JsonResponse({"success": True, "message": "验证码正确"})
         return JsonResponse({"success": False, "message": "验证码错误"})
 
 
@@ -178,11 +177,10 @@ class RetrievePasswordView(APIView):
         code = request.POST.get("code")
         records = EmailVerificationCode.objects.filter(code=code)
         for record in records:
-            if record.user == user:
-                user.set_password(request.POST.get("password"))
-                user.save()
-                record.delete()
-                return JsonResponse({"success": True, "message": "密码修改成功"})
+            user.set_password(request.POST.get("password"))
+            user.save()
+            record.delete()
+            return JsonResponse({"success": True, "message": "密码修改成功"})
         return JsonResponse({"success": False, "message": "验证码错误"})
 
 

@@ -32,7 +32,9 @@ def get_user_info(user):
 def get_application_info(application):
     return {
         "applicationId": application.application_id,
-        "applicationUser": application.application_user,
+        "applicationType": application.application_type,
+        "applicationUserName": application.application_user.username,
+        "applicationUserFirstName": application.application_user.first_name,
         "applicationImage": application.application_image,
         "applicationDate": application.application_date,
         "applicationDescription": application.application_description,

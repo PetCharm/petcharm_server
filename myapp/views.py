@@ -288,9 +288,10 @@ class PostView(APIView):
         post_title = request.POST.get("postTitle")
         post_content = request.POST.get("postContent")
         img = request.FILES.get("postCover")
-        post_cover = image.upload_image(img)
-        if post_cover is None:
+        if img is None:
             post_cover = "https://pic.mcatk.com/soto/202205061633426.png"
+        else:
+            post_cover = image.upload_image(img)
         post = Post(post_user=user, post_title=post_title, post_content=post_content, post_cover=post_cover)
         post.post_date = datetime.now() + timedelta(hours=8)
         post.save()

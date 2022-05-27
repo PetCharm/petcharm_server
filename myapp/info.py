@@ -63,8 +63,8 @@ def get_comment_info(comment):
 def get_trace_path_info(trace_path, complicated=False):
     info = {
         "tracePathId": trace_path.trace_path_id,
-        "tracePathStartTime": trace_path.trace_path_start_time,
-        "tracePathEndTime": trace_path.trace_path_end_time,
+        "tracePathStartTime": trace_path.trace_path_start_time.strftime("%Y-%m-%d %H:%M"),
+        "tracePathEndTime": trace_path.trace_path_end_time.strftime("%Y-%m-%d %H:%M"),
         "tracePathNote": trace_path.trace_path_note,
     }
     if complicated:

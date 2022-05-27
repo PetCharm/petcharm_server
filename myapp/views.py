@@ -43,6 +43,8 @@ class UserInfo(APIView):
         user = User.objects.get(id=user_id)
         user.first_name = request.POST.get("userFirstName")
         user.email = request.POST.get("userEmail")
+        user.user_icon_url = request.POST.get("userIconUrl")
+        user.user_phone_number = request.POST.get("userPhoneNumber")
         user.save()
         return JsonResponse({"success": True, "message": "用户信息设置成功"})
 

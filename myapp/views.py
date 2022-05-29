@@ -76,7 +76,9 @@ class RegisterView(APIView):
         email = request.POST.get("userEmail")
         if len(User.objects.filter(username=username)) > 0:
             return JsonResponse({"success": False, "message": "用户名已存在"})
-        User.objects.create_user(username=username, password=password, email=email)
+        user = User.objects.create_user(username=username, password=password, email=email)
+        user.first_name = username
+        user.save()
         token = openIM.register(username)
         return JsonResponse({"success": True, "message": "注册成功", "im_token": token})
 

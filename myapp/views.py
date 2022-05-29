@@ -123,6 +123,7 @@ class PetView(APIView):
         pet.pet_breed = request.POST.get("petBreed")
         pet.pet_gender = request.POST.get("petGender")
         pet.pet_date_of_birth = request.POST.get("petDateOfBirth")
+        pet.save()
         return JsonResponse({"success": True, "message": "宠物信息设置成功"})
 
 
@@ -363,7 +364,8 @@ class ApplicationView(APIView):
         img = request.FILES.get("applicationImage")
         application_image = image.upload_image(img)
         application_description = request.POST.get("applicationDescription")
-        application = Application(application_user=user, application_type=application_type, application_image=application_image,
+        application = Application(application_user=user, application_type=application_type,
+                                  application_image=application_image,
                                   application_description=application_description)
         application.save()
         return JsonResponse({"success": True, "message": "申请成功"})

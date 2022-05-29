@@ -23,6 +23,7 @@ def get_user_info(user):
         "userFirstName": user.first_name,
         "userLastName": user.last_name,
         "userIsActive": user.is_active,
+        "userEmailValid": user.email_valid,
         "userType": user.user_type,
         "userEmail": user.email,
         "userIconUrl": user.user_icon_url,

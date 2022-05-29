@@ -93,6 +93,7 @@ class User(AbstractUser):
     pet = models.ForeignKey(Pet, models.DO_NOTHING, blank=True, null=True)
     user_icon_url = models.CharField(max_length=200, blank=True, null=True)
     user_phone_number = models.CharField(max_length=100, blank=True, null=True)
+    email_valid = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'user'

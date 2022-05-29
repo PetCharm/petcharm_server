@@ -150,7 +150,7 @@ class VerificationCodeView(APIView):
         code = request.POST.get("code")
         records = EmailVerificationCode.objects.filter(code=code)
         for record in records:
-            user.is_active = True
+            user.email_valid = True
             user.save()
             record.delete()
             return JsonResponse({"success": True, "message": "验证码正确"})
@@ -165,8 +165,8 @@ class RetrievePasswordVerificationCodeView(APIView):
     def post(self, request):
         username = request.POST.get("username")
         user = User.objects.get(username=username)
-        if not user.is_active:
-            return JsonResponse({"success": False, "message": "该用户未绑定邮箱"})
+        if not user.email_valid:
+            return JsonResponse({"success": False, "message": "用户邮箱未验证"})
         verification.send_code(user.email)
         return JsonResponse({"success": True, "message": "验证码已发送"})
 

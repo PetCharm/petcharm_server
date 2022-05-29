@@ -14,6 +14,7 @@ def get_pet_info(pet):
         "petDateOfBirth": pet.pet_date_of_birth,
         "petVaccinationStatus": pet.pet_vaccination_status,
         "petRegistrationNumber": pet.pet_registration_number,
+        "petIconUrl": pet.pet_icon_url,
     }
 
 

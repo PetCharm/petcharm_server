@@ -125,6 +125,7 @@ class PetView(APIView):
         pet.pet_breed = request.POST.get("petBreed")
         pet.pet_gender = request.POST.get("petGender")
         pet.pet_date_of_birth = request.POST.get("petDateOfBirth")
+        pet.pet_icon_url = request.POST.get("petIconUrl")
         pet.save()
         return JsonResponse({"success": True, "message": "宠物信息设置成功"})
 

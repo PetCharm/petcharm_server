@@ -36,7 +36,7 @@ class Pet(models.Model):
     pet_type = models.CharField(max_length=100, blank=True, null=True)
     pet_breed = models.CharField(max_length=100, blank=True, null=True)
     pet_gender = models.CharField(max_length=100, blank=True, null=True)
-    pet_date_of_birth = models.DateTimeField(blank=True, null=True)
+    pet_date_of_birth = models.DateTimeField(blank=True, null=False)
     pet_registration_number = models.CharField(max_length=100, blank=True, null=True)
     pet_vaccination_status = models.BooleanField(default=False)
     pet_icon_url = models.CharField(max_length=200, blank=True, null=True)
@@ -91,7 +91,7 @@ class Star(models.Model):
 
 class User(AbstractUser):
     user_type = models.CharField(max_length=100, blank=True, null=True)
-    pet = models.ForeignKey(Pet, models.DO_NOTHING, blank=True, null=True)
+    pet = models.ForeignKey(Pet, on_delete=models.SET_NULL, blank=True, null=True)
     user_icon_url = models.CharField(max_length=200, blank=True, null=True)
     user_phone_number = models.CharField(max_length=100, blank=True, null=True)
     email_valid = models.BooleanField(default=False)

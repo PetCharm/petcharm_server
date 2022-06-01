@@ -81,7 +81,7 @@ def get_rating_info(rating):
         "ratingId": rating.rating_id,
         "ratingContent": rating.rating_content,
         "ratingScore": rating.rating_score,
-        "ratingByUserFirstName": rating.rating_by_user.first_name,
+        "ratingByUser": rating.rating_by_user.first_name,
         "ratingByUserIconUrl": rating.rating_by_user.user_icon_url,
     }
 
@@ -125,4 +125,14 @@ def get_consultation_info(consultation):
         "consultationContent": consultation.content,
         "consultationDate": consultation.date.strftime("%Y-%m-%d %H:%M"),
         "consultationCover": consultation.cover,
+    }
+
+
+def get_consultation_reply_info(consultation_reply):
+    return {
+        "consultationReplyId": consultation_reply.id,
+        "consultationReplyUser": consultation_reply.user.first_name,
+        "consultationReplyUserIconUrl": consultation_reply.user.user_icon_url,
+        "consultationReplyContent": consultation_reply.content,
+        "consultationReplyDate": consultation_reply.date.strftime("%Y-%m-%d %H:%M"),
     }

@@ -619,3 +619,18 @@ class UserConsultationsView(APIView):
             consultation_info = info.get_consultation_info(consultation)
             consultation_list.append(consultation_info)
         return JsonResponse({"success": True, "consultations": consultation_list})
+
+
+class ConsultationReplyListView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取咨询回复列表',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        consultation_id = request.GET.get("consultationId")
+        consultation = Consultation.objects.get(id=consultation_id)
+        consultation_replies = ConsultationReply.objects.filter(consultation=consultation)
+        consultation_reply_list = []
+        for consultation_reply in consultation_replies:
+            consultation_reply_list.append(info.get_consultation_reply_info(consultation_reply))
+        return JsonResponse({"success": True, "consultationReplies": consultation_reply_list})

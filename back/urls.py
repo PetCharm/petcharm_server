@@ -76,5 +76,6 @@ urlpatterns = [
     path('api/uploadImage/', myapp.views.UploadImageView.as_view()),
     path('api/tracePath/', myapp.views.TracePathView.as_view()),
     path('api/tracePath/list/', myapp.views.TracePathListView.as_view()),
+    path('api/service/list/', myapp.views.ServiceListView.as_view()),
     url(r'^', TemplateView.as_view(template_name="index.html")),
 ]

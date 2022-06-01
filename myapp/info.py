@@ -74,3 +74,27 @@ def get_trace_path_info(trace_path, complicated=False):
     if complicated:
         info["tracePathCoordinates"] = trace_path.trace_path_coordinates
     return info
+
+
+def get_service_info(user, complicated=False):
+    info = {
+        "userId": user.id,
+        "userName": user.username,
+        "userFirstName": user.first_name,
+        "userType": user.user_type,
+        "userEmail": user.email,
+        "userIconUrl": user.user_icon_url,
+    }
+    return info
+
+
+def get_service_score(user):
+    score = 0
+    count = 0
+    ratings = Rating.objects.filter(rating_user=user)
+    for rating in ratings:
+        score += rating.rating_score
+        count += 1
+    if count == 0:
+        return 0
+    return score / count

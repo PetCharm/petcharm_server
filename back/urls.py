@@ -78,5 +78,7 @@ urlpatterns = [
     path('api/tracePath/list/', myapp.views.TracePathListView.as_view()),
     path('api/service/list/', myapp.views.ServiceListView.as_view()),
     path('api/service/', myapp.views.ServiceView.as_view()),
+    path('api/consultation/', myapp.views.ConsultantView.as_view()),
+    path('api/consultation/reply/', myapp.views.ConsultationReplyView.as_view()),
     url(r'^', TemplateView.as_view(template_name="index.html")),
 ]

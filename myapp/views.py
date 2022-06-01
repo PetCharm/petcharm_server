@@ -560,3 +560,46 @@ class ServiceView(APIView):
         service = User.objects.get(id=service_id)
         service_info = info.get_service_info(service, complicated=True)
         return JsonResponse({"success": True, "service": service_info})
+
+
+class ConsultantView(APIView):
+    @swagger_auto_schema(
+        operation_summary='发起咨询',
+        response={200: 'OK'}
+    )
+    def post(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        consultation_title = request.POST.get("consultationTitle")
+        consultation_content = request.POST.get("consultationContent")
+        consultation_user = request.POST.get("consultationUser")
+        img = request.FILES.get("consultationCover")
+        if img is None:
+            post_cover = "https://pic.mcatk.com/soto/202205061633426.png"
+        else:
+            post_cover = image.upload_image(img)
+        consultation = Consultation(user_1=user, user_2=consultation_user, title=consultation_title,
+                                    content=consultation_content, cover=post_cover,
+                                    date=datetime.now() + timedelta(hours=8))
+        consultation.save()
+        return JsonResponse({"success": True, "message": "咨询发起成功"})
+
+
+class ConsultationReplyView(APIView):
+    @swagger_auto_schema(
+        operation_summary='回复咨询',
+        response={200: 'OK'}
+    )
+    def post(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        consultation_id = request.POST.get("consultationId")
+        consultation_reply_content = request.POST.get("consultationReplyContent")
+        consultation = Consultation.objects.get(id=consultation_id)
+        if consultation is None:
+            return JsonResponse({"success": False, "message": "咨询不存在"})
+        consultation_reply = ConsultationReply(consultation=consultation, user=user,
+                                               content=consultation_reply_content,
+                                               date=datetime.now() + timedelta(hours=8))
+        consultation_reply.save()
+        return JsonResponse({"success": True, "message": "回复成功"})

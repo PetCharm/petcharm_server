@@ -158,3 +158,27 @@ class TracePath(models.Model):
 
     class Meta:
         db_table = 'trace_path'
+
+
+class Consultation(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_1 = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='user_1')
+    user_2 = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='user_2')
+    title = models.CharField(max_length=100, blank=True, null=True)
+    content = models.CharField(max_length=500, blank=True, null=True)
+    date = models.DateTimeField(blank=True, null=True)
+    cover = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        db_table = 'consultation'
+
+
+class ConsultationReply(models.Model):
+    id = models.AutoField(primary_key=True)
+    consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE, blank=True, null=True)
+    content = models.CharField(max_length=500, blank=True, null=True)
+    user = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True)
+    date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'consultation_reply'

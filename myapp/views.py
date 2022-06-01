@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.contrib import auth
+from django.db.models import Q
 from django.http import JsonResponse
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
@@ -532,3 +533,18 @@ class TracePathListView(APIView):
         for trace_path in trace_paths:
             trace_path_list.append(info.get_trace_path_info(trace_path))
         return JsonResponse({"success": True, "tracePaths": trace_path_list})
+
+
+class ServiceListView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取服务列表',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        services = User.objects.filter(Q(user_type='兽医') | Q(user_type='护工'))
+        service_list = []
+        for service in services:
+            service_info = info.get_service_info(service)
+            service_info["userScore"] = info.get_service_score(service)
+            service_list.append(service_info)
+        return JsonResponse({"success": True, "services": service_list})

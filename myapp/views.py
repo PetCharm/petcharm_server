@@ -438,7 +438,7 @@ class AdminAgreeApplicationView(APIView):
             return JsonResponse({"success": False, "message": "没有权限"})
         application_id = request.POST.get("applicationId")
         application = Application.objects.get(application_id=application_id)
-        application_user = application.user
+        application_user = application.application_user
         application_user.user_type = application.application_type
         application_user.save()
         application.delete()

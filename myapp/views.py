@@ -650,8 +650,6 @@ class RatingView(APIView):
         content = request.POST.get("ratingContent")
         if score is None:
             return JsonResponse({"success": False, "message": "评分不能为空"})
-        if score not in ["1", "2", "3", "4", "5"]:
-            return JsonResponse({"success": False, "message": "评分不正确"})
         rating = Rating(rating_user=rating_user, rating_by_user=rating_by_user,
                         rating_score=score, rating_content=content,
                         rating_date=datetime.now() + timedelta(hours=8))

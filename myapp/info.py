@@ -27,6 +27,7 @@ def get_user_info(user):
         "userEmailValid": user.email_valid,
         "userType": user.user_type,
         "userEmail": user.email,
+        "userPhoneNumber": user.user_phone_number,
         "userIconUrl": user.user_icon_url,
     }
 
@@ -94,6 +95,7 @@ def get_service_info(user, complicated=False):
         "userFirstName": user.first_name,
         "userType": user.user_type,
         "userEmail": user.email,
+        "userPhoneNumber": user.user_phone_number,
         "userIconUrl": user.user_icon_url,
     }
     if complicated:

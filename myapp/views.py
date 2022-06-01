@@ -603,3 +603,19 @@ class ConsultationReplyView(APIView):
                                                date=datetime.now() + timedelta(hours=8))
         consultation_reply.save()
         return JsonResponse({"success": True, "message": "回复成功"})
+
+
+class UserConsultationsView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取用户咨询列表',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        user_id = request.session.get('_auth_user_id')
+        user = User.objects.get(id=user_id)
+        consultations = Consultation.objects.filter(Q(user_1=user) | Q(user_2=user))
+        consultation_list = []
+        for consultation in consultations:
+            consultation_info = info.get_consultation_info(consultation)
+            consultation_list.append(consultation_info)
+        return JsonResponse({"success": True, "consultations": consultation_list})

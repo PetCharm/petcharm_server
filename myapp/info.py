@@ -114,3 +114,15 @@ def get_service_score(user):
     if count == 0:
         return 0
     return score / count
+
+
+def get_consultation_info(consultation):
+    return {
+        "consultationId": consultation.id,
+        "consultationUser1": consultation.user_1.first_name,
+        "consultationUser2": consultation.user_2.first_name,
+        "consultationTitle": consultation.title,
+        "consultationContent": consultation.content,
+        "consultationDate": consultation.date.strftime("%Y-%m-%d %H:%M"),
+        "consultationCover": consultation.cover,
+    }

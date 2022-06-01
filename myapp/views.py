@@ -548,3 +548,15 @@ class ServiceListView(APIView):
             service_info["userScore"] = info.get_service_score(service)
             service_list.append(service_info)
         return JsonResponse({"success": True, "services": service_list})
+
+
+class ServiceView(APIView):
+    @swagger_auto_schema(
+        operation_summary='获取服务详情',
+        response={200: 'OK'}
+    )
+    def get(self, request):
+        service_id = request.GET.get("userId")
+        service = User.objects.get(id=service_id)
+        service_info = info.get_service_info(service, complicated=True)
+        return JsonResponse({"success": True, "service": service_info})

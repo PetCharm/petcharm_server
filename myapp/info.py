@@ -76,6 +76,16 @@ def get_trace_path_info(trace_path, complicated=False):
     return info
 
 
+def get_rating_info(rating):
+    return {
+        "ratingId": rating.rating_id,
+        "ratingContent": rating.rating_content,
+        "ratingScore": rating.rating_score,
+        "ratingByUserFirstName": rating.rating_by_user.first_name,
+        "ratingByUserIconUrl": rating.rating_by_user.user_icon_url,
+    }
+
+
 def get_service_info(user, complicated=False):
     info = {
         "userId": user.id,
@@ -85,6 +95,12 @@ def get_service_info(user, complicated=False):
         "userEmail": user.email,
         "userIconUrl": user.user_icon_url,
     }
+    if complicated:
+        ratings_info = []
+        ratings = Rating.objects.filter(rating_user=user)
+        for rating in ratings:
+            ratings_info.append(get_rating_info(rating))
+        info["ratings"] = ratings_info
     return info
 
 

@@ -634,3 +634,25 @@ class ConsultationReplyListView(APIView):
         for consultation_reply in consultation_replies:
             consultation_reply_list.append(info.get_consultation_reply_info(consultation_reply))
         return JsonResponse({"success": True, "consultationReplies": consultation_reply_list})
+
+
+class RatingView(APIView):
+    @swagger_auto_schema(
+        operation_summary='评价服务',
+        response={200: 'OK'}
+    )
+    def post(self, request):
+        user_id = request.session.get('_auth_user_id')
+        rating_by_user = User.objects.get(id=user_id)
+        rating_user_id = request.POST.get("ratingUserId")
+        rating_user = User.objects.get(id=rating_user_id)
+        score = request.POST.get("ratingScore")
+        if score is None:
+            return JsonResponse({"success": False, "message": "评分不能为空"})
+        if score not in ["1", "2", "3", "4", "5"]:
+            return JsonResponse({"success": False, "message": "评分不正确"})
+        rating = Rating(rating_user=rating_user, rating_by_user=rating_by_user,
+                        rating_score=score,
+                        rating_date=datetime.now() + timedelta(hours=8))
+        rating.save()
+        return JsonResponse({"success": True, "message": "评价成功"})

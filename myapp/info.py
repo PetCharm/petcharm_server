@@ -83,6 +83,7 @@ def get_rating_info(rating):
         "ratingScore": rating.rating_score,
         "ratingByUser": rating.rating_by_user.first_name,
         "ratingByUserIconUrl": rating.rating_by_user.user_icon_url,
+        "ratingDate": rating.rating_date.strftime("%Y-%m-%d %H:%M"),
     }
 
 

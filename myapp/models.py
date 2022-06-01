@@ -63,6 +63,7 @@ class Rating(models.Model):
     rating_score = models.IntegerField(blank=True, null=True)
     rating_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True, related_name='rating_1')
     rating_by_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True, related_name='rating_2')
+    rating_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         db_table = 'rating'

@@ -276,6 +276,9 @@ class PetsView(APIView):
         response={200: 'OK'}
     )
     def get(self, request):
+        user = User.objects.get(id=request.session.get('_auth_user_id'))
+        if user.user_type != "兽医":
+            return JsonResponse({"success": False, "message": "权限不足"})
         pets_info = []
         for pet in Pet.objects.all():
             pets_info.append(info.get_pet_info(pet))
@@ -588,7 +591,7 @@ class ConsultantView(APIView):
 class ConsultationReplyView(APIView):
     @swagger_auto_schema(
         operation_summary='回复咨询',
-        response={200: 'OK'}
+        response={200: 'OK'},
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')

@@ -52,6 +52,7 @@ def get_post_info(post):
         "postDate": post.post_date.strftime("%Y-%m-%d %H:%M"),
         "postAuthor": post.post_user.first_name,
         "postCover": post.post_cover,
+        "keywords": post.post_keywords.split("|")[:4],
     }
 
 

@@ -14,6 +14,7 @@ import myapp.verification as verification
 import myapp.openIM as openIM
 import myapp.info as info
 import logging
+import predict as predict
 
 from myapp.serializers import UserSerializer, TracePathSerializer
 
@@ -374,6 +375,8 @@ class PostView(APIView):
             post_cover = image.upload_image(img)
         post = Post(post_user=user, post_title=post_title, post_content=post_content, post_cover=post_cover)
         post.post_date = datetime.now() + timedelta(hours=8)
+        post.post_senti = predict.senti(post_content)
+        post.post_keywords = predict.ner(post_content)
         post.save()
         return JsonResponse({"success": True, "message": "帖子发布成功"})
 
@@ -386,7 +389,7 @@ class UserPostsView(APIView):
     def get(self, request):
         user_id = request.session.get('_auth_user_id')
         user = User.objects.get(id=user_id)
-        posts = Post.objects.all().filter(post_user=user).order_by("-post_date")
+        posts = Post.objects.all().filter(post_user=user).order_by("post_senti")
         posts_info = []
         for post in posts:
             post_info = info.get_post_info(post)

@@ -1,24 +1,55 @@
-# petcharm_server
+# PetCharm-Server
 
 ## API Document
 
 http://petcharm.mcac.cc/doc/
 
-## 环境
+## Environment
 
-- Python 3.9
-- MySQL 5.7
+- CentOS 7.9.2009 x86_64
+- Mysql Server 5.7.37
+- Python 3.9.7
+- Django 3.2.9
+- Nginx 1.20.2
+
 
 Python库见requirements
 
 
-## 模型ER图
+## ER
 
 ![petcharm](https://user-images.githubusercontent.com/59144459/169692088-499fdbd5-4a8f-4658-b8f8-913ad5116e7f.png)
 
+## Files
+
+| 目录 | 文件名 | 功能 |
+| ---- | ------ | ---- |
+|myapp |  views.py   |视图  |
+|myapp  |admin.py |  管理员视图  |
+|myapp  |image.py  | 上传图片相关  |
+|myapp | models.py  |模型文件  |
+|myapp | infos.py  | 接口返回信息序列化  |
+|myapp  |openIM.py | openIM后端实现  |
+|myapp  |predict.py| 预测相关  |
+|myapp | verification.py  |  验证码相关  |
+|myapp  |tests.py |  测试文件  |
+|myapp  |serializers.py| 序列化相关  |
+|myapp/migrations |     数据库迁移文件  |
+|bert_model |  | NLP机器学习相关  
+|back |  settings.py  |  Django设置  
+|back |  urls.py  |  API url相关  
+|back   |wsgi.py  |  uwsgi配置相关  
+|static/admin      | |管理端静态页面  
+|static/def-yasg|    |   swagger静态页面  
+|static/rest_framework  |  | REST框架静态页面  
+|根目录  |  tools.py   |数据表转换工具代码  
+|根目录  |  uwsgi.ini  |uwsgi配置文件  
+|根目录   | manage.py  |Django自带管理工具入口  
+|根目录  |  requirements.txt  | 需要的pip软件包  
+|根目录   | README.md | readme文件|
 
 
-## 模型
+## Models
 
 | | | | | |
 |-|-|-|-|-|

@@ -18,7 +18,8 @@ Python库见requirements
 
 ## ER
 
-![petcharm](https://user-images.githubusercontent.com/59144459/169692088-499fdbd5-4a8f-4658-b8f8-913ad5116e7f.png)
+![petcharm](https://user-images.githubusercontent.com/59144459/171667212-65e6c7a8-4647-429e-b024-4b803c838633.png)
+
 
 ## Files
 

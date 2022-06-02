@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.contrib import auth
 from django.db.models import Q
 from django.http import JsonResponse
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -37,7 +38,8 @@ class UserInfo(APIView):
 
     @swagger_auto_schema(
         operation_summary='修改用户信息',
-        response={200: 'OK'}
+        response={200: 'OK'},
+
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -53,7 +55,15 @@ class UserInfo(APIView):
 class LoginView(APIView):
     @swagger_auto_schema(
         operation_summary='用户登录',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['userName', 'userPassword'],
+            properties={
+                'userName': openapi.Schema(type=openapi.TYPE_STRING),
+                'userPassword': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         username = request.POST.get("userName")
@@ -69,7 +79,16 @@ class LoginView(APIView):
 class RegisterView(APIView):
     @swagger_auto_schema(
         operation_summary='用户注册',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['userName', 'userPassword', 'userEmail'],
+            properties={
+                'userName': openapi.Schema(type=openapi.TYPE_STRING),
+                'userPassword': openapi.Schema(type=openapi.TYPE_STRING),
+                'userEmail': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         username = request.POST.get("userName")
@@ -110,7 +129,20 @@ class PetView(APIView):
 
     @swagger_auto_schema(
         operation_summary='修改宠物信息,没有则创建',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['petName', 'petType', 'petBreed', 'petGender',
+                      'petDateOfBirth', 'petIconUrl'],
+            properties={
+                'petName': openapi.Schema(type=openapi.TYPE_STRING),
+                'petType': openapi.Schema(type=openapi.TYPE_STRING),
+                'petBreed': openapi.Schema(type=openapi.TYPE_STRING),
+                'petGender': openapi.Schema(type=openapi.TYPE_STRING),
+                'petDateOfBirth': openapi.Schema(type=openapi.TYPE_STRING),
+                'petIconUrl': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -144,7 +176,14 @@ class VerificationCodeView(APIView):
 
     @swagger_auto_schema(
         operation_summary='验证验证码',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['code'],
+            properties={
+                'code': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -162,7 +201,14 @@ class VerificationCodeView(APIView):
 class RetrievePasswordVerificationCodeView(APIView):
     @swagger_auto_schema(
         operation_summary='获取验证码',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['username'],
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         username = request.POST.get("username")
@@ -176,7 +222,16 @@ class RetrievePasswordVerificationCodeView(APIView):
 class RetrievePasswordView(APIView):
     @swagger_auto_schema(
         operation_summary='找回密码',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['username', 'code', 'password'],
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING),
+                'code': openapi.Schema(type=openapi.TYPE_STRING),
+                'password': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         username = request.POST.get("username")
@@ -208,7 +263,7 @@ class AllPostsView(APIView):
 class AllCommentsView(APIView):
     @swagger_auto_schema(
         operation_summary='获取所有评论',
-        response={200: 'OK'}
+        response={200: 'OK'},
     )
     def get(self, request):
         post_id = request.GET.get("postId")
@@ -224,7 +279,15 @@ class AllCommentsView(APIView):
 class CommentView(APIView):
     @swagger_auto_schema(
         operation_summary='添加评论',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['postId', 'commentContent'],
+            properties={
+                'postId': openapi.Schema(type=openapi.TYPE_NUMBER),
+                'commentContent': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -288,7 +351,16 @@ class PetsView(APIView):
 class PostView(APIView):
     @swagger_auto_schema(
         operation_summary='发布帖子',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['postTitle', 'postContent', 'postCover'],
+            properties={
+                'postTitle': openapi.Schema(type=openapi.TYPE_STRING),
+                'postContent': openapi.Schema(type=openapi.TYPE_STRING),
+                'postCover': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -341,7 +413,14 @@ class UserCommentsView(APIView):
 class UserDeletesPostView(APIView):
     @swagger_auto_schema(
         operation_summary='用户删除帖子',
-        responses={200: 'OK'}
+        responses={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['postId'],
+            properties={
+                'postId': openapi.Schema(type=openapi.TYPE_NUMBER),
+            },
+        ),
     )
     def post(self, request):
         user = User.objects.get(id=request.session.get('_auth_user_id'))
@@ -362,7 +441,16 @@ def test(request):
 class ApplicationView(APIView):
     @swagger_auto_schema(
         operation_summary='申请兽医/护工资格认证',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['applicationType', 'applicationImage', 'applicationDescription'],
+            properties={
+                'applicationType': openapi.Schema(type=openapi.TYPE_STRING),
+                'applicationImage': openapi.Schema(type=openapi.TYPE_FILE),
+                'applicationDescription': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -432,7 +520,14 @@ class AdminApplicationListView(APIView):
 class AdminAgreeApplicationView(APIView):
     @swagger_auto_schema(
         operation_summary='通过兽医/护工资格认证申请',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['applicationId'],
+            properties={
+                'applicationId': openapi.Schema(type=openapi.TYPE_NUMBER),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -451,7 +546,14 @@ class AdminAgreeApplicationView(APIView):
 class AdminRejectApplicationView(APIView):
     @swagger_auto_schema(
         operation_summary='拒绝兽医/护工资格认证申请',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['applicationId'],
+            properties={
+                'applicationId': openapi.Schema(type=openapi.TYPE_NUMBER),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -467,7 +569,14 @@ class AdminRejectApplicationView(APIView):
 class UploadImageView(APIView):
     @swagger_auto_schema(
         operation_summary='上传图片',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['image'],
+            properties={
+                'image': openapi.Schema(type=openapi.TYPE_FILE),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -482,7 +591,14 @@ class UploadImageView(APIView):
 class VaccinationView(APIView):
     @swagger_auto_schema(
         operation_summary='兽医添加接种记录',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['petId'],
+            properties={
+                'petId': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -508,7 +624,18 @@ class TracePathView(APIView):
 
     @swagger_auto_schema(
         operation_summary='添加追踪记录',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['tracePathCoordinates', 'tracePathStartTime',
+                      'tracePathEndTime', 'tracePathNote'],
+            properties={
+                'tracePathCoordinates': openapi.Schema(type=openapi.TYPE_STRING),
+                'tracePathStartTime': openapi.Schema(type=openapi.TYPE_STRING),
+                'tracePathEndTime': openapi.Schema(type=openapi.TYPE_STRING),
+                'tracePathNote': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -568,7 +695,17 @@ class ServiceView(APIView):
 class ConsultantView(APIView):
     @swagger_auto_schema(
         operation_summary='发起咨询',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['consultationTitle', 'consultationContent', 'consultationUser', 'consultationCover'],
+            properties={
+                'consultationTitle': openapi.Schema(type=openapi.TYPE_STRING),
+                'consultationContent': openapi.Schema(type=openapi.TYPE_STRING),
+                'consultationUser': openapi.Schema(type=openapi.TYPE_STRING),
+                'consultationCover': openapi.Schema(type=openapi.TYPE_FILE),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -592,6 +729,14 @@ class ConsultationReplyView(APIView):
     @swagger_auto_schema(
         operation_summary='回复咨询',
         response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['consultationId', 'consultationReplyContent'],
+            properties={
+                'consultationId': openapi.Schema(type=openapi.TYPE_NUMBER),
+                'consultationReplyContent': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')
@@ -642,7 +787,17 @@ class ConsultationReplyListView(APIView):
 class RatingView(APIView):
     @swagger_auto_schema(
         operation_summary='评价服务',
-        response={200: 'OK'}
+        response={200: 'OK'},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['ratingUserId', 'ratingScore',
+                      'ratingContent'],
+            properties={
+                'ratingUserId': openapi.Schema(type=openapi.TYPE_NUMBER),
+                'ratingScore': openapi.Schema(type=openapi.TYPE_NUMBER),
+                'ratingContent': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
     )
     def post(self, request):
         user_id = request.session.get('_auth_user_id')

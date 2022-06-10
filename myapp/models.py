@@ -36,7 +36,7 @@ class Pet(models.Model):
     pet_type = models.CharField(max_length=100, blank=True, null=True)
     pet_breed = models.CharField(max_length=100, blank=True, null=True)
     pet_gender = models.CharField(max_length=100, blank=True, null=True)
-    pet_date_of_birth = models.DateTimeField(blank=True, null=False)
+    pet_date_of_birth = models.DateTimeField(blank=True, null=True)
     pet_registration_number = models.CharField(max_length=100, blank=True, null=True)
     pet_vaccination_status = models.BooleanField(default=False)
     pet_icon_url = models.CharField(max_length=200, blank=True, null=True)

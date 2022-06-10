@@ -101,6 +101,7 @@ class RegisterView(APIView):
         user.first_name = username
         user.save()
         token = openIM.register(username)
+        auth.login(request, user)
         return JsonResponse({"success": True, "message": "注册成功", "im_token": token})
 
 
@@ -160,6 +161,8 @@ class PetView(APIView):
         pet.pet_gender = request.POST.get("petGender")
         pet.pet_date_of_birth = request.POST.get("petDateOfBirth")
         pet.pet_icon_url = request.POST.get("petIconUrl")
+        if pet.pet_icon_url is None:
+            pet.pet_icon_url = 'https://pic.mcatk.com/soto/202206101105339.webp'
         pet.save()
         return JsonResponse({"success": True, "message": "宠物信息设置成功"})
 

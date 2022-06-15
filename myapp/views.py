@@ -46,7 +46,9 @@ class UserInfo(APIView):
         user_id = request.session.get('_auth_user_id')
         user = User.objects.get(id=user_id)
         user.first_name = request.POST.get("userFirstName")
-        user.email = request.POST.get("userEmail")
+        if request.POST.get("userEmail") != user.email:
+            user.email_valid = False
+            user.email = request.POST.get("userEmail")
         user.user_icon_url = request.POST.get("userIconUrl")
         user.user_phone_number = request.POST.get("userPhoneNumber")
         user.save()

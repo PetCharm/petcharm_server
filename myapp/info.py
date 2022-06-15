@@ -10,7 +10,7 @@ def get_pet_info(pet):
         "petType": pet.pet_type,
         "petBreed": pet.pet_breed,
         "petGender": pet.pet_gender,
-        "petAge": (datetime.now(timezone.utc) - pet.pet_date_of_birth).days,
+        "petAge": (datetime.now() - pet.pet_date_of_birth).days,
         "petDateOfBirth": pet.pet_date_of_birth,
         "petVaccinationStatus": pet.pet_vaccination_status,
         "petRegistrationNumber": pet.pet_registration_number,

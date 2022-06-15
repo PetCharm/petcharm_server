@@ -651,7 +651,8 @@ class TracePathView(APIView):
         trace_path_end_time = request.POST.get("tracePathEndTime")
         trace_path_note = request.POST.get("tracePathNote")
         TracePath(trace_path_user=user, trace_path_coordinates=trace_path_coordinates,
-                  trace_path_start_time=trace_path_start_time, trace_path_end_time=trace_path_end_time,
+                  trace_path_start_time=trace_path_start_time + timedelta(hours=8),
+                  trace_path_end_time=trace_path_end_time + timedelta(hours=8),
                   trace_path_note=trace_path_note).save()
         return JsonResponse({"success": True, "message": "设置成功"})
 

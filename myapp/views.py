@@ -74,8 +74,8 @@ class LoginView(APIView):
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
-            token = openIM.get_token(user.username)
-            return JsonResponse({"success": True, "message": "登录成功", "im_token": token})
+            # token = openIM.get_token(user.username)
+            return JsonResponse({"success": True, "message": "登录成功"})
         return JsonResponse({"success": False, "message": "用户名或密码错误"})
 
 
@@ -102,9 +102,9 @@ class RegisterView(APIView):
         user = User.objects.create_user(username=username, password=password, email=email)
         user.first_name = username
         user.save()
-        token = openIM.register(username)
+        # token = openIM.register(username)
         auth.login(request, user)
-        return JsonResponse({"success": True, "message": "注册成功", "im_token": token})
+        return JsonResponse({"success": True, "message": "注册成功"})
 
 
 class LogoutView(APIView):
@@ -306,7 +306,7 @@ class CommentView(APIView):
         comment.comment_content = request.POST.get("commentContent")
         comment.comment_user = user
         comment.comment_post = post
-        comment.comment_date = datetime.now() + timedelta(hours=8)
+        comment.comment_date = datetime.now()
         comment.save()
         return JsonResponse({"success": True, "message": "评论成功"})
 
@@ -379,7 +379,7 @@ class PostView(APIView):
         else:
             post_cover = image.upload_image(img)
         post = Post(post_user=user, post_title=post_title, post_content=post_content, post_cover=post_cover)
-        post.post_date = datetime.now() + timedelta(hours=8)
+        post.post_date = datetime.now()
         post.post_senti = predict.senti(post_content)
         post.post_keywords = predict.ner(post_content)
         post.save()
@@ -653,8 +653,8 @@ class TracePathView(APIView):
         trace_path_end_time = request.POST.get("tracePathEndTime")
         trace_path_note = request.POST.get("tracePathNote")
         TracePath(trace_path_user=user, trace_path_coordinates=trace_path_coordinates,
-                  trace_path_start_time=trace_path_start_time + timedelta(hours=8),
-                  trace_path_end_time=trace_path_end_time + timedelta(hours=8),
+                  trace_path_start_time=trace_path_start_time,
+                  trace_path_end_time=trace_path_end_time,
                   trace_path_note=trace_path_note).save()
         return JsonResponse({"success": True, "message": "设置成功"})
 
@@ -729,7 +729,7 @@ class ConsultantView(APIView):
             post_cover = image.upload_image(img)
         consultation = Consultation(user_1=user, user_2=consultation_user, title=consultation_title,
                                     content=consultation_content, cover=post_cover,
-                                    date=datetime.now() + timedelta(hours=8))
+                                    date=datetime.now())
         consultation.save()
         return JsonResponse({"success": True, "message": "咨询发起成功"})
 
@@ -757,7 +757,7 @@ class ConsultationReplyView(APIView):
             return JsonResponse({"success": False, "message": "咨询不存在"})
         consultation_reply = ConsultationReply(consultation=consultation, user=user,
                                                content=consultation_reply_content,
-                                               date=datetime.now() + timedelta(hours=8))
+                                               date=datetime.now())
         consultation_reply.save()
         return JsonResponse({"success": True, "message": "回复成功"})
 
@@ -819,6 +819,6 @@ class RatingView(APIView):
             return JsonResponse({"success": False, "message": "评分不能为空"})
         rating = Rating(rating_user=rating_user, rating_by_user=rating_by_user,
                         rating_score=score, rating_content=content,
-                        rating_date=datetime.now() + timedelta(hours=8))
+                        rating_date=datetime.now())
         rating.save()
         return JsonResponse({"success": True, "message": "评价成功"})
